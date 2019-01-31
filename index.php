@@ -28,11 +28,11 @@ $user_name = 'Денис Филипкин'; // укажите здесь ваш�
 
         <nav class="user-menu">
 
-        <?php if ($is_auth == true): ?>
+        <?php if ($is_auth): ?>
           <div class="user-menu__logged">
-            <p><?php print($user_name); ?></p>
+            <p><?php echo "$user_name"; ?></p>
           </div>
-        <?php elseif ($is_auth == false): ?>
+        <?php else: ?>
           <ul class="user-menu__list">
             <li class="user-menu__item">
               <a href="#">Регистрация</a>
