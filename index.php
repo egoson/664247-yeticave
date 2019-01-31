@@ -30,7 +30,7 @@ $user_name = 'Денис Филипкин'; // укажите здесь ваш�
 
         <?php if ($is_auth): ?>
           <div class="user-menu__logged">
-            <p><?php echo "$user_name"; ?></p>
+            <p><?= "$user_name"; ?></p>
           </div>
         <?php else: ?>
           <ul class="user-menu__list">
