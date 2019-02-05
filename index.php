@@ -92,9 +92,9 @@ $announcement = [
         <p class="promo__text">На нашем интернет-аукционе ты найдёшь самое эксклюзивное сноубордическое и горнолыжное снаряжение.</p>
         <ul class="promo__list">
             <?php
-            foreach ($announcement as $item): ?>
+            foreach ($equipments as $item): ?>
             <li class="promo__item promo__item--boards">
-                <a class="promo__link" href="pages/all-lots.html"><?=$item["category"];?></a>
+                <a class="promo__link" href="pages/all-lots.html"><?=$item;?></a>
             </li>
             <?php endforeach; ?>
         </ul>
