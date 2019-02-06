@@ -42,6 +42,15 @@ $announcement = [
       "url" => "img/lot-6.jpg"
     ],
 ];
+function do_price($price)
+{
+    $integer_price = ceil($price);
+    if ($integer_price > 1000) {
+        $integer_price_space = number_format($integer_price, 0, ',', ' ');
+    }
+    $price_rub = print($integer_price_space . " <b class=\"rub\">р</b>");
+    return $price_rub;
+};
 ?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -115,7 +124,11 @@ $announcement = [
                     <div class="lot__state">
                         <div class="lot__rate">
                             <span class="lot__amount"><?=$item["price"];?></span>
-                            <span class="lot__cost">цена<b class="rub">р</b></span>
+                            <span class="lot__cost">
+                                <?php
+                                $price = $item["price"];
+                                do_price($price);
+                                ?></span>
                         </div>
                         <div class="lot__timer timer">
                             12:23
