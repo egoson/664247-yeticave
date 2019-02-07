@@ -44,10 +44,7 @@ $announcement = [
 ];
 function do_price($price)
 {
-    $integer_price = ceil($price);
-    $integer_price = number_format($integer_price, 0, ',', ' ');
-    $integer_price = $integer_price . " <b class=\"rub\">р</b>";
-    return $integer_price;
+    return number_format(ceil($price), 0, ',', ' ') . " <b class=\"rub\">р</b>";
 };
 ?>
 <!DOCTYPE html>
@@ -123,8 +120,7 @@ function do_price($price)
                         <div class="lot__rate">
                             <span class="lot__amount"><?=$item["price"];?></span>
                             <span class="lot__cost">
-                                <?=(do_price($item["price"]));
-                                ?></span>
+                                <?=(do_price($item["price"])); ?></span>
                         </div>
                         <div class="lot__timer timer">
                             12:23
