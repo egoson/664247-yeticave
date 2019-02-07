@@ -45,11 +45,8 @@ $announcement = [
 function do_price($price)
 {
     $integer_price = ceil($price);
-    if ($integer_price > 1000) {
-        $integer_price_space = number_format($integer_price, 0, ',', ' ');
-    }
-    $price_rub = print($integer_price_space . " <b class=\"rub\">р</b>");
-    return $price_rub;
+    $integer_price = number_format($integer_price, 0, ',', ' ');
+    return $integer_price;
 };
 ?>
 <!DOCTYPE html>
@@ -126,8 +123,7 @@ function do_price($price)
                             <span class="lot__amount"><?=$item["price"];?></span>
                             <span class="lot__cost">
                                 <?php
-                                $price = $item["price"];
-                                do_price($price);
+                                print(do_price($item["price"]) . " <b class=\"rub\">р</b>");
                                 ?></span>
                         </div>
                         <div class="lot__timer timer">
