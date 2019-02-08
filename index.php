@@ -51,7 +51,10 @@ function do_price($price)
 
 require_once ("functions.php");
 
-$page_content = include_template("index.php", ['equipments' => $equipments]);
+$page_content = include_template("index.php", [
+        'equipments' => $equipments,
+        'announcement' => $announcement
+]);
 $layout_content = include_template("layout.php", [
     'content' => $page_content,
     'user' => $user_name,
