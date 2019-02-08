@@ -1,7 +1,7 @@
 <?php
 $is_auth = rand(0, 1);
 $title_name = "Главная";
-
+$user_name = 'Денис Филипкин';
 
 $equipments = ["Доски и лыжи", "Крепления", "Ботинки", "Одежда", "Инструменты", "Разное"];
 $announcement = [
@@ -46,7 +46,7 @@ function do_price($price)
 {
     $integer_price = ceil($price);
     $integer_price = number_format($integer_price, 0, ',', ' ');
-    return $integer_price . " <b class=\"rub\">р</b>";
+    return esc($integer_price) . " <b class=\"rub\">р</b>";
 };
 
 require_once ("functions.php");
