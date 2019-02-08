@@ -42,18 +42,13 @@ $announcement = [
       "url" => "img/lot-6.jpg"
     ],
 ];
-function do_price($price)
-{
-    $integer_price = ceil($price);
-    $integer_price = number_format($integer_price, 0, ',', ' ');
-    return esc($integer_price) . " <b class=\"rub\">р</b>";
-};
+
 
 require_once ("functions.php");
 
 $page_content = include_template("index.php", [
-        'equipments' => $equipments,
-        'announcement' => $announcement
+    'equipments' => $equipments,
+    'announcement' => $announcement
 ]);
 $layout_content = include_template("layout.php", [
     'content' => $page_content,
@@ -62,4 +57,4 @@ $layout_content = include_template("layout.php", [
     'is_auth' => $is_auth
 ]);
 print ($layout_content);
-?>
+
