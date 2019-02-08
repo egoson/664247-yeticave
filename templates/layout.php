@@ -1,3 +1,7 @@
+<?php
+$user_name = 'Денис Филипкин';
+?>
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>

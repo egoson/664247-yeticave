@@ -1,7 +1,7 @@
 <?php
 $is_auth = rand(0, 1);
 $title_name = "Главная";
-$user_name = 'Денис Филипкин';
+
 
 $equipments = ["Доски и лыжи", "Крепления", "Ботинки", "Одежда", "Инструменты", "Разное"];
 $announcement = [
@@ -58,8 +58,8 @@ $page_content = include_template("index.php", [
 $layout_content = include_template("layout.php", [
     'content' => $page_content,
     'user' => $user_name,
-    'title' => $title_name
+    'title' => $title_name,
+    'is_auth' => $is_auth
 ]);
 print ($layout_content);
 ?>
-
