@@ -29,7 +29,7 @@
                             <span class="lot__cost"><?=(do_price(htmlspecialchars($item["price"]))); ?></span>
                         </div>
                         <div class="lot__timer timer">
-                            12:23
+                            <?=do_time_to_cell();?>
                         </div>
                     </div>
                 </div>

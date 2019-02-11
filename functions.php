@@ -18,3 +18,12 @@ function do_price($price)
     $integer_price = number_format($integer_price, 0, ',', ' ');
     return $integer_price . " <b class=\"rub\">р</b>";
 };
+function do_time_to_cell()
+{
+    $ts = time();
+    $ts_midnight = strtotime('tomorrow');
+    $time_to_midnight = $ts_midnight - time();
+    $hours = floor($time_to_midnight / 3600);
+    $minutes = floor(($time_to_midnight % 3600) / 60);
+    return $hours . ":" . $minutes;
+}
