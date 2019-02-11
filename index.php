@@ -49,9 +49,7 @@ require_once ("functions.php");
 
 $page_content = include_template("index.php", [
     'equipments' => $equipments,
-    'announcement' => $announcement,
-    'hours' => $hours,
-    'minutes' => $minutes
+    'announcement' => $announcement
 ]);
 $layout_content = include_template("layout.php", [
     'content' => $page_content,
