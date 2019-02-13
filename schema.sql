@@ -23,7 +23,7 @@ CREATE TABLE lot (
 	dt_add TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	name CHAR(128),
 	description TINYTEXT,
-	url TINYTEXT,
+	image TINYTEXT,
 	start_price INT(20),
 	dt_close TIMESTAMP,
 	step_price INT(20),
@@ -35,7 +35,7 @@ CREATE TABLE lot (
 CREATE TABLE rate (
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	dt_add TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-	amount CHAR(20),
+	amount INT(20),
 	users_id INT(20),
 	lot_id INT(20)
 );
