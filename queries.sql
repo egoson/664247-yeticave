@@ -16,6 +16,22 @@ INSERT INTO users (email, name, contacts, avatar, lot_id, rate_id) VALUES -- д�
     "hhjsj.sss",
     "2",
     "2"
+  ),
+  (
+    "oson@mail.ru",
+    "Vanyz",
+    "890419999",
+    "hhjssj.ss",
+    "3",
+    "3"
+  ),
+  (
+    "on@mail.ru",
+    "Datt",
+    "89021289999",
+    "hhj11sj.sss",
+    "4",
+    "3"
   );
 
 INSERT INTO lot (name, description, image, start_price, step_price, users_id, win_id, categories_id) VALUES -- добавляет лот в таблицу лотов
@@ -50,7 +66,7 @@ INSERT INTO lot (name, description, image, start_price, step_price, users_id, wi
     "8000",
     "1001",
     "3",
-    "0",
+    "3",
     "2"
   ),
   (
@@ -60,7 +76,7 @@ INSERT INTO lot (name, description, image, start_price, step_price, users_id, wi
     "10999",
     "1001",
     "4",
-    "0",
+    "4",
     "3"
   ),
   (
@@ -70,8 +86,8 @@ INSERT INTO lot (name, description, image, start_price, step_price, users_id, wi
     "7500",
     "1001",
     "5",
-    "0",
-    "4"
+    "4",
+    "0"
   ),
   (
     "Маска Oakley Canopy",
@@ -80,8 +96,8 @@ INSERT INTO lot (name, description, image, start_price, step_price, users_id, wi
     "5400",
     "1001",
     "6",
-    "0",
-    "6"
+    "1",
+    "0"
   );
 
 INSERT INTO rate (amount, users_id, lot_id) VALUES -- добавляет ставку в таблицу ставок
