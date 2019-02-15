@@ -50,7 +50,7 @@ INSERT INTO lot (name, description, image, start_price, step_price, users_id, wi
     "8000",
     "1001",
     "3",
-    "3",
+    "0",
     "2"
   ),
   (
@@ -60,7 +60,7 @@ INSERT INTO lot (name, description, image, start_price, step_price, users_id, wi
     "10999",
     "1001",
     "4",
-    "4",
+    "0",
     "3"
   ),
   (
@@ -70,7 +70,7 @@ INSERT INTO lot (name, description, image, start_price, step_price, users_id, wi
     "7500",
     "1001",
     "5",
-    "5",
+    "0",
     "4"
   ),
   (
@@ -80,7 +80,7 @@ INSERT INTO lot (name, description, image, start_price, step_price, users_id, wi
     "5400",
     "1001",
     "6",
-    "6",
+    "0",
     "6"
   );
 
