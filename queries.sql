@@ -46,7 +46,7 @@ INSERT INTO lot (name, description, image, start_price, step_price, users_id, wi
     "10999",
     "1001",
     "1",
-    "1",
+    NULL,
     "1"
   ),
   (
@@ -56,7 +56,7 @@ INSERT INTO lot (name, description, image, start_price, step_price, users_id, wi
     "159999",
     "1001",
     "2",
-    "2",
+    NULL,
     "1"
   ),
   (
@@ -66,7 +66,7 @@ INSERT INTO lot (name, description, image, start_price, step_price, users_id, wi
     "8000",
     "1001",
     "3",
-    "3",
+    "1",
     "2"
   ),
   (
@@ -76,7 +76,7 @@ INSERT INTO lot (name, description, image, start_price, step_price, users_id, wi
     "10999",
     "1001",
     "4",
-    "4",
+    "2",
     "3"
   ),
   (
@@ -85,9 +85,9 @@ INSERT INTO lot (name, description, image, start_price, step_price, users_id, wi
     "board5-lot.ru",
     "7500",
     "1001",
-    "5",
     "4",
-    "0"
+    "3",
+    "4"
   ),
   (
     "Маска Oakley Canopy",
@@ -95,31 +95,31 @@ INSERT INTO lot (name, description, image, start_price, step_price, users_id, wi
     "board6-lot.ru",
     "5400",
     "1001",
-    "6",
     "1",
-    "0"
+    "2",
+    "6"
   );
 
 INSERT INTO rate (amount, users_id, lot_id) VALUES -- добавляет ставку в таблицу ставок
   (
     "15000",
     "1",
-    "1"
+    "2"
   ),
   (
     "12000",
     "2",
-    "2"
+    "3"
   ),
   (
     "40000",
     "3",
-    "1"
+    "2"
   ),
   (
     "13500",
     "4",
-    "3"
+    "2"
   );
 
 SELECT * FROM categories; -- выводит все строки из таблицы категорий
