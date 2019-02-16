@@ -22,7 +22,7 @@ CREATE TABLE lot (
   id INT AUTO_INCREMENT PRIMARY KEY,
 	dt_add TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	name CHAR(128),
-	description TINYTEXT,
+	description TEXT,
 	image TINYTEXT,
 	start_price INT(20),
 	dt_close TIMESTAMP,
