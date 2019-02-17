@@ -1,61 +1,51 @@
 <?php
+require_once ("functions.php");
+
+$link = mysqli_connect(localhost,root, "", yeticave);
+mysqli_set_charset($link, "utf8");
+if (!$link) {
+    print("Ошибка: невозможно подключиться к MySQL " . mysqli_connect_error());
+}
+else {
+    $sql = "SELECT name FROM categories";
+    $result = mysqli_query($link,$sql);
+
+    if (!$result) {
+        print("Ошибочка " . mysqli_connect_error());
+    }
+    else {
+        $categories = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    }
+    $sql = "SELECT image, l.name, start_price, c.name AS categories_name FROM lot AS l
+    JOIN categories AS c ON l.categories_id = c.id ";
+    $result = mysqli_query($link,$sql);
+
+    if(!$result) {
+        print("Ошибочка " . mysqli_connect_error());
+    }
+    else {
+        $lot = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    }
+
+}
+
 $is_auth = rand(0, 1);
 $title_name = "Главная";
 $user_name = 'Денис Филипкин';
 date_default_timezone_set("Europe/Moscow");
 setlocale(LC_ALL, 'ru_RU');
-$equipments = ["Доски и лыжи", "Крепления", "Ботинки", "Одежда", "Инструменты", "Разное"];
-$announcement = [
-    [
-      "name" => "2014 Rossignol District Snowboard",
-      "category" => "Доски и лыжи",
-      "price" => "10999",
-      "url" => "img/lot-1.jpg"
-    ],
-    [
-      "name" => "DC Ply Mens 2016/2017 Snowboard",
-      "category" => "Доски и лыжи",
-      "price" => "159999",
-      "url" => "img/lot-2.jpg"
-    ],
-    [
-      "name" => "Крепления Union Contact Pro 2015 года размер L/XL",
-      "category" => "Крепление",
-      "price" => "8000",
-      "url" => "img/lot-3.jpg"
-    ],
-    [
-      "name" => "Ботинки для сноуборда DC Mutiny Charocal",
-      "category" => "Ботинки",
-      "price" => "10999",
-      "url" => "img/lot-4.jpg"
-    ],
-    [
-      "name" => "Куртка для сноуборда DC Mutiny Charocal",
-      "category" => "Одежда",
-      "price" => "7500",
-      "url" => "img/lot-5.jpg"
-    ],
-    [
-      "name" => "Маска Oakley Canopy",
-      "category" => "Разное",
-      "price" => "5400",
-      "url" => "img/lot-6.jpg"
-    ],
-];
 
-
-require_once ("functions.php");
 
 $page_content = include_template("index.php", [
-    'equipments' => $equipments,
-    'announcement' => $announcement
+    'equipments' => $categories,
+    'announcement' => $lot
 ]);
 $layout_content = include_template("layout.php", [
     'content' => $page_content,
     'user' => $user_name,
     'title' => $title_name,
-    'is_auth' => $is_auth
+    'is_auth' => $is_auth,
+    'equipments' => $categories
 ]);
 print ($layout_content);
 
