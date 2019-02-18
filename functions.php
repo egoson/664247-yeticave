@@ -25,5 +25,5 @@ function do_time_to_cell()
     $time_to_midnight = $ts_midnight - time();
     $hours = floor($time_to_midnight / 3600);
     $minutes = floor(($time_to_midnight % 3600) / 60);
-    return $hours . ":" . $minutes;
+    return $hours . ":" . sprintf('%02d', $minutes);
 }

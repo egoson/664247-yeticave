@@ -26,7 +26,7 @@
                     <div class="lot__state">
                         <div class="lot__rate">
                             <span class="lot__amount"><?=htmlspecialchars($item["start_price"]);?></span>
-                            <span class="lot__cost"><?=(do_price(htmlspecialchars($item["start_price"]))); ?></span>
+                            <span class="lot__cost"><?=(do_price(htmlspecialchars($item["amount"]))); ?></span>
                         </div>
                         <div class="lot__timer timer">
                             <?=do_time_to_cell();?>
