@@ -27,3 +27,32 @@ function do_time_to_cell()
     $minutes = floor(($time_to_midnight % 3600) / 60);
     return $hours . ":" . sprintf('%02d', $minutes);
 }
+
+$get_categories = function ($link) {
+
+    $sql = "SELECT name FROM categories";
+    $result = mysqli_query($link,$sql);
+
+    if (!$result) {
+        print("Ошибочка " . mysqli_connect_error());
+    }
+    else {
+        $categories = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    }
+    return $categories;
+};
+
+$get_lots = function ($link) {
+
+    $sql = "SELECT image, l.name, start_price, c.name AS categories_name, r.amount FROM lot AS l
+    JOIN categories AS c ON l.categories_id = c.id
+    JOIN rate AS r ON r.lot_id = l.id";
+    $result = mysqli_query($link, $sql);
+
+    if (!$result) {
+        print("Ошибочка " . mysqli_connect_error());
+    } else {
+        $lot = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    };
+    return $lot;
+};
