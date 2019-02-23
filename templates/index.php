@@ -22,11 +22,11 @@
                 </div>
                 <div class="lot__info">
                     <span class="lot__category"><?=htmlspecialchars($item["categories_name"]);?></span>
-                    <h3 class="lot__title"><a class="text-link" href="pages/lot.html"><?=htmlspecialchars($item["name"]);?></a></h3>
+                    <h3 class="lot__title"><a class="text-link" href="lot.php?lot_id=<?=$item["lot_id"];?>"><?=htmlspecialchars($item["name"]);?></a></h3>
                     <div class="lot__state">
                         <div class="lot__rate">
                             <span class="lot__amount"><?=htmlspecialchars($item["start_price"]);?></span>
-                            <span class="lot__cost"><?=(do_price(htmlspecialchars($item["amount"]))); ?></span>
+                            <span class="lot__cost"><?=(do_price(htmlspecialchars($item["r_amount"]))); ?></span>
                         </div>
                         <div class="lot__timer timer">
                             <?=do_time_to_cell();?>
