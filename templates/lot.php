@@ -57,7 +57,7 @@
                         <?php  foreach ($raties as $rate): ?>
                         <tr class="history__item">
                             <td class="history__name"><?=$rate["name"];?></td>
-                            <td class="history__price"><?=$rate["amount"];?></td>
+                            <td class="history__price"><?=do_price($rate["amount"], NULL);?></td>
                             <td class="history__time">5 минут назад</td>
                         </tr>
                         <?php endforeach; ?>

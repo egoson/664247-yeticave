@@ -12,23 +12,22 @@ function include_template($name, $data) {
     return $result;
 };
 
-function do_price($price)
+function do_price($price, $rub = "<b class=\"rub\">р</b>")
 {
     $integer_price = ceil($price);
     $integer_price = number_format($integer_price, 0, ',', ' ');
-    return $integer_price . " <b class=\"rub\">р</b>";
+    return $integer_price . $rub;
 };
 
 function min_rate($price,$step_price) {
-    $min_rate = do_price($min_rate = $price + $step_price);
-    return $min_rate;
+    return do_price($min_rate = $price + $step_price);
 };
 
 function do_time_to_cell()
 {
     $ts = time();
     $ts_midnight = strtotime('tomorrow');
-    $time_to_midnight = $ts_midnight - time();
+    $time_to_midnight = $ts_midnight - $ts;
     $hours = floor($time_to_midnight / 3600);
     $minutes = floor(($time_to_midnight % 3600) / 60);
     return $hours . ":" . sprintf('%02d', $minutes);
