@@ -12,15 +12,21 @@ function include_template($name, $data) {
     return $result;
 };
 
-function do_price($price, $rub = "<b class=\"rub\">р</b>")
+function do_price($price, $rub = true)
 {
     $integer_price = ceil($price);
     $integer_price = number_format($integer_price, 0, ',', ' ');
-    return $integer_price . $rub;
+    if ($rub) {
+        $rub = "<b class=\"rub\">р</b>";
+        $price_result = $integer_price . $rub;
+    } else {
+        $price_result = $integer_price;
+    }
+    return $price_result;
 };
 
 function min_rate($price,$step_price) {
-    return do_price($min_rate = $price + $step_price);
+    return do_price($price + $step_price);
 };
 
 function do_time_to_cell()

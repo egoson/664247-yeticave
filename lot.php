@@ -7,30 +7,25 @@ if (!$link) {
     die();
 };
 
-if ($_GET["lot_id"]) {
-    if ($get_lot($link, $_GET["lot_id"])) {
-        $lot = $get_lot($link, $_GET["lot_id"]);
-        $categories = $get_categories($link);
-        $raties = $get_raties($link, $_GET["lot_id"]);
+$is_error = true;
 
-        if ($_GET["lot_id"] == $lot["lot_id"]) {
-            $page_content = include_template("lot.php", [
-                "equipments" => $categories,
-                "lot" => $lot,
-                "raties" => $raties
-            ]);
-        } else {
-            $page_content = include_template('404.php', [
-                "equipments" => $categories ]);
-            }
-        }
-        else {
-            $page_content = include_template('404.php', [
-                "equipments" => $categories ]);
-        }
-    } else {
+if ($_GET["lot_id"]) {
+    $lot = $get_lot($link, $_GET["lot_id"]);
+    $categories = $get_categories($link);
+    $raties = $get_raties($link, $_GET["lot_id"]);
+
+    if ($_GET["lot_id"] === $lot["lot_id"]) {
+        $is_error = false;
+        $page_content = include_template("lot.php", [
+            "equipments" => $categories,
+            "lot" => $lot,
+            "raties" => $raties
+        ]);
+    } 
+}
+if ($is_error) {
     $page_content = include_template('404.php', [
-        "equipments" => $categories ]);
+        "equipments" => $categories]);
 };
 
 $is_auth = rand(0, 1);
