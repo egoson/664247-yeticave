@@ -21,6 +21,7 @@ function do_price($price, $rub = true)
         $integer_price = $integer_price . $rub;
     }
     return $integer_price;
+
 };
 
 function min_rate($price,$step_price) {
