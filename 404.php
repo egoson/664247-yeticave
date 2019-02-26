@@ -8,18 +8,17 @@ if (!$link) {
 }
 
 $categories =  $get_categories($link);
-$lot = $get_lots($link);
+
 
 $is_auth = rand(0, 1);
-$title_name = "Главная";
+$title_name = "404";
 $user_name = 'Денис Филипкин';
 date_default_timezone_set("Europe/Moscow");
 setlocale(LC_ALL, 'ru_RU');
 
 
-$page_content = include_template("index.php", [
-    'equipments' => $categories,
-    'announcement' => $lot
+$page_content = include_template("404.php", [
+    'equipments' => $categories
 ]);
 $layout_content = include_template("layout.php", [
     'content' => $page_content,
@@ -29,4 +28,3 @@ $layout_content = include_template("layout.php", [
     'equipments' => $categories
 ]);
 print ($layout_content);
-
