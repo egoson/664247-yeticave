@@ -42,7 +42,7 @@ INSERT INTO lot (name, description, image, start_price, step_price, users_id, wi
     снаряд отличной гибкостью и отзывчивостью, а симметричная геометрия в сочетании с классическим прогибом кэмбер
     позволит уверенно держать высокие скорости. А если к концу катального дня сил совсем не останется, просто посмотрите
     на Вашу доску и улыбнитесь, крутая графика от Шона Кливера еще никого не оставляла равнодушным.",
-    "board1-lot.ru",
+    "img/lot-1.jpg",
     "10999",
     "1001",
     "1",
@@ -52,7 +52,7 @@ INSERT INTO lot (name, description, image, start_price, step_price, users_id, wi
   (
     "DC Ply Mens 2016/2017 Snowboard",
     "Тоже самое тут в описании",
-    "board2-lot.ru",
+    "img/lot-2.jpg",
     "159999",
     "1001",
     "2",
@@ -62,7 +62,7 @@ INSERT INTO lot (name, description, image, start_price, step_price, users_id, wi
   (
     "Крепления Union Contact Pro 2015 года размер L/XL",
     "Тоже самое тут в описании",
-    "board3-lot.ru",
+    "img/lot-3.jpg",
     "8000",
     "1001",
     "3",
@@ -72,7 +72,7 @@ INSERT INTO lot (name, description, image, start_price, step_price, users_id, wi
   (
     "Ботинки для сноуборда DC Mutiny Charocal",
     "Тоже самое тут в описании",
-    "board4-lot.ru",
+    "img/lot-4.jpg",
     "10999",
     "1001",
     "4",
@@ -82,7 +82,7 @@ INSERT INTO lot (name, description, image, start_price, step_price, users_id, wi
   (
     "Куртка для сноуборда DC Mutiny Charocal",
     "Тоже самое тут в описании",
-    "board5-lot.ru",
+    "img/lot-5.jpg",
     "7500",
     "1001",
     "4",
@@ -92,7 +92,7 @@ INSERT INTO lot (name, description, image, start_price, step_price, users_id, wi
   (
     "Маска Oakley Canopy",
     "Тоже самое тут в описании",
-    "board6-lot.ru",
+    "img/lot-6.jpg",
     "5400",
     "1001",
     "1",
@@ -107,8 +107,18 @@ INSERT INTO rate (amount, users_id, lot_id) VALUES -- добавляет ста�
     "2"
   ),
   (
+    "15000",
+    "1",
+    "3"
+  ),
+  (
     "12000",
     "2",
+    "3"
+  ),
+  (
+    "40000",
+    "3",
     "3"
   ),
   (
@@ -128,9 +138,9 @@ SELECT l.name, l.start_price, l.image, r.amount, c.name FROM lot AS l -- выв�
 LEFT JOIN rate AS r ON r.users_id = l.users_id
 JOIN categories AS c ON c.id = l.categories_id
 WHERE l.dt_close > l.dt_add
-ORDER BY l.dt_add DESC
+ORDER BY l.dt_add DESC;
 
-SELECT * FROM lot AS l -- выводит лот по id
+SELECT image, l.name, start_price, c.name AS categories_name FROM lot AS l -- выводит лот по id
 JOIN categories AS c ON l.categories_id = c.id
 WHERE l.id = 1;
 
