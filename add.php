@@ -9,7 +9,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $dict = ["lot-name" => "Имя лота", "description" => "Описание", "photo" => "Изображение", "start_price" => "Начальная цена", "step_price" => "Шаг ставки", "lot-date" => "Дата окончания торгов", "category" => "Категория"];
     $errors = [];
 
-
     foreach ($required as $key) {
         if (empty($_POST[$key])) {
             $errors[$key] = "Это поле надо заполнить";

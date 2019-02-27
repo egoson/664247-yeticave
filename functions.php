@@ -38,8 +38,6 @@ function do_time_to_cell()
     return $hours . ":" . sprintf('%02d', $minutes);
 };
 
-$nama = "Разное";
-
 
 
 function check_date_format($date) {
