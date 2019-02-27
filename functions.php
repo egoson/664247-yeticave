@@ -82,7 +82,7 @@ $get_lots = function ($link) {
 
 $get_lot = function ($link, $lot_id) {
 
-    $sql = "SELECT l.id as lot_id, image, l.name, start_price, c.name AS categories_name, MAX(r.amount) AS r_amount, l.step_price FROM lot AS l
+    $sql = "SELECT l.id as lot_id, image, l.name, l.description, start_price, c.name AS categories_name, MAX(r.amount) AS r_amount, l.step_price FROM lot AS l
     JOIN categories AS c ON l.categories_id = c.id
     JOIN rate AS r ON r.lot_id = l.id
     WHERE lot_id = $lot_id";
@@ -110,6 +110,19 @@ $get_raties = function ($link, $lot_id) {
         $cur_raties = mysqli_fetch_all($result, MYSQLI_ASSOC);
     };
     return $cur_raties;
+};
+
+$get_id_category = function ($link, $name_category) {
+    $sql = "SELECT id FROM categories WHERE name = '$name_category'";
+    $result = mysqli_query($link, $sql);
+
+    if (!$result) {
+        print("Ошибочка " . mysqli_connect_error());
+    }
+    else {
+        $categories = mysqli_fetch_array($result, MYSQLI_ASSOC);
+    }
+    return $categories["id"];
 };
 
 $get_category = function ($link, $name_category) {

@@ -1,7 +1,7 @@
 <?php
 require_once ("functions.php");
 require_once ("init.php");
-var_dump($_POST);
+
 $categories =  $get_categories($link);
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $new_lot = $_POST;
@@ -20,14 +20,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
 
-    if (isset($new_lot["step_price"]) && $new_lot["step_price"] > 0) {
+    if (isset($new_lot["step_price"]) && $new_lot["step_price"] > 0 && ctype_digit($new_lot["step_price"])) {
         $step_price = $new_lot["step_price"];
     } else {
         $errors["step_price"] = "введите корректное число";
     }
 
-    if (isset($new_lot["start_price"])) {
+    if (isset($new_lot["start_price"]) && ctype_digit($new_lot["start_price"])) {
         $start_price = $new_lot["start_price"];
+    } else {
+        $errors["start_price"] = "введите корректное число";
     }
 
     if (isset($new_lot["description"])) {
@@ -51,26 +53,34 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $errors["lot-date"] = "Введите корректную дату торгов";
     }
     if (isset($_FILES["photo"])) {
-        $new_lot_add = $_FILES["photo"]["name"];
+        $new_lot_add = $_POST;
+        $tmp_name = $_FILES['photo']['tmp_name'];
+
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $file_type = finfo_file($finfo, $tmp_name);
+        if ($file_type !== "jpg") {
+            $errors["file"] = 'Загрузите картинку формата JPG';
+        }
+
+
         $filename = uniqid() . ".jpg";
         $new_lot_add["path"] = $filename;
-        move_uploaded_file($_FILES["photo"]["tmp_name"], "img/" . $filename);
-        var_dump($_FILES["photo"]);
-        $sql = 'INSERT INTO lot (lot.name, description, image, start_price, categories_id, step_price, users_id, win_id) VALUES (?, ?, ?, ?, ?, 1, 1, 1)';
-        $stmt = db_get_prepare_stmt($link, $sql, [$new_lot["lot-name"],$new_lot_add["description"],$new_lot_add["path"],$new_lot_add["start_price"], $new_lot_add["step_price"]]);
+        move_uploaded_file($_FILES["photo"]["tmp_name"], 'img/' . $filename);
+        $id_category = $get_id_category($link,$new_lot_add["category"]);
+        $new_lot_add["path"] = "img/" . $new_lot_add["path"];
+        $sql = 'INSERT INTO lot (lot.name, lot.description, image, start_price, step_price, categories_id, dt_close,  users_id, win_id) VALUES (?, ?, ?, ?, ?, ?, ?, 1, 1)';
+        $stmt = db_get_prepare_stmt($link, $sql, [$new_lot_add["lot-name"], $new_lot_add["description"], $new_lot_add["path"],$new_lot_add["start_price"], $new_lot_add["step_price"], $id_category, $new_lot_add["lot-date"]]);
         $res = mysqli_stmt_execute($stmt);
-        var_dump($new_lot_add["lot-name"]);
         if ($res) {
             $new_lot_add = mysqli_insert_id($link);
 
-            header("Location: lot.php?id=" . $new_lot_add);
+            header("Location: lot.php?lot_id=" . $new_lot_add);
         }
         else {
             $content = include_template('error.php', ['error' => mysqli_error($link)]);
         }
     }
-var_dump($new_lot["lot-name"]);
-
+var_dump($errors);
     if (count($errors)) {
         $page_content = include_template("add.php", ["image" => $image,
             "errors" => $errors,
@@ -81,7 +91,8 @@ var_dump($new_lot["lot-name"]);
             "description_cur" => $description,
             "lot_name_cur" => $lot_name,
             "category_cur" => $category,
-            "lot_date_cur" => $lot_date
+            "lot_date_cur" => $lot_date,
+            "file_err" => $file
         ]);
     }
     else {

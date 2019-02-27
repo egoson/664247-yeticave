@@ -45,7 +45,10 @@
         <textarea id="message" name="description" placeholder="Напишите описание лота" ><?=$description_cur?></textarea>
         <span class="form__error">Напишите описание лота</span>
       </div>
-      <div class="form__item form__item--file"> <!-- form__item--uploaded -->
+        <?php
+        $classname = isset($errors["file"]) ? "form__item--invalid" : "";
+        ?>
+      <div class="form__item form__item--file <?=$classname?>"> <!-- form__item--uploaded -->
         <label>Изображение</label>
         <div class="preview">
           <button class="preview__remove" type="button">x</button>
@@ -59,7 +62,7 @@
             <span>+ Добавить</span>
           </label>
         </div>
-          <span class="form__error"><?=$errors['file'];?></span>
+          <span class="form__error"><?=$errors["file"];?></span>
       </div>
       <div class="form__container-three">
           <?php
@@ -67,7 +70,7 @@
           ?>
         <div class="form__item form__item--small <?=$classname?>">
           <label for="lot-rate">Начальная цена</label>
-          <input id="lot-rate" type="number" value="<?=$start_price_cur?>" name="start_price" placeholder="0" >
+          <input id="lot-rate"  value="<?=$start_price_cur?>" name="start_price" placeholder="0" >
           <span class="form__error"><?=$errors["start_price"]?></span>
         </div>
           <?php
@@ -75,7 +78,7 @@
           ?>
         <div class="form__item form__item--small <?=$classname?>">
           <label for="lot-step">Шаг ставки</label>
-          <input id="lot-step" type="number" value="<?=$step_price_cur;?>" name="step_price" placeholder="0" >
+          <input id="lot-step"  value="<?=$step_price_cur;?>" name="step_price" placeholder="0" >
           <span class="form__error"><?=$errors["step_price"];?></span>
         </div>
           <?php
