@@ -57,7 +57,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         move_uploaded_file($_FILES["photo"]["tmp_name"], "img/" . $filename);
         var_dump($_FILES["photo"]);
         $sql = 'INSERT INTO lot (lot.name, description, image, start_price, categories_id, step_price, users_id, win_id) VALUES (?, ?, ?, ?, ?, 1, 1, 1)';
-        $stmt = db_get_prepare_stmt($link, $sql, [$new_lot_add["lot-name"],$new_lot_add['description'],$new_lot_add["path"],$new_lot_add["start_price"], $new_lot_add['step_price']]);
+        $stmt = db_get_prepare_stmt($link, $sql, [$new_lot["lot-name"],$new_lot_add["description"],$new_lot_add["path"],$new_lot_add["start_price"], $new_lot_add["step_price"]]);
         $res = mysqli_stmt_execute($stmt);
         var_dump($new_lot_add["lot-name"]);
         if ($res) {
@@ -69,7 +69,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $content = include_template('error.php', ['error' => mysqli_error($link)]);
         }
     }
-
+var_dump($new_lot["lot-name"]);
 
     if (count($errors)) {
         $page_content = include_template("add.php", ["image" => $image,
