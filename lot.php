@@ -11,6 +11,7 @@ $is_error = true;
 
 if ($_GET["lot_id"]) {
     $lot = $get_lot($link, $_GET["lot_id"]);
+    var_dump($lot);
     $categories = $get_categories($link);
     $raties = $get_raties($link, $lot["lot_id"]);
 
