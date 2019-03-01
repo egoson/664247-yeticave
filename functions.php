@@ -12,6 +12,7 @@ function include_template($name, $data) {
     return $result;
 };
 
+
 function do_price($price, $rub = true)
 {
     $integer_price = ceil($price);
@@ -39,7 +40,6 @@ function do_time_to_cell()
 
 
 
-
 function check_date_format($date) {
     $result = false;
     $regexp = '/(\d{2})\.(\d{2})\.(\d{4})/m';
@@ -53,14 +53,11 @@ $get_categories = function ($link) {
     $sql = "SELECT name FROM categories";
     $result = mysqli_query($link, $sql);
 
-
     if (!$result) {
         print("Ошибочка " . mysqli_connect_error());
     }
-    else {
-        $categories = mysqli_fetch_all($result, MYSQLI_ASSOC);
-    }
-    return $categories;
+    return mysqli_fetch_all($result, MYSQLI_ASSOC);
+
 };
 
 $get_lots = function ($link) {
@@ -73,17 +70,14 @@ $get_lots = function ($link) {
 
     if (!$result) {
         print("Ошибочка " . mysqli_connect_error());
-    } else {
-        $lot = mysqli_fetch_all($result, MYSQLI_ASSOC);
-    };
-    return $lot;
+    }
+    return mysqli_fetch_all($result, MYSQLI_ASSOC);
+
 };
 
 $get_lot = function ($link, $lot_id) {
 
-
-    $sql = "SELECT l.id as lot_id, image, l.name, l.description, start_price, c.name AS categories_name, MAX(r.amount) AS r_amount, l.step_price FROM lot AS l
-
+    $sql = "SELECT l.id as lot_id, l.dt_add, image, l.name, l.description, start_price, c.name AS categories_name, MAX(r.amount) AS r_amount, l.step_price FROM lot AS l
     JOIN categories AS c ON l.categories_id = c.id
     JOIN rate AS r ON r.lot_id = l.id
     WHERE lot_id = $lot_id";
@@ -91,10 +85,8 @@ $get_lot = function ($link, $lot_id) {
 
     if (!$result) {
         print("Ошибочка " . mysqli_connect_error());
-    } else {
-        $cur_lot = mysqli_fetch_array($result, MYSQLI_ASSOC);
-    };
-    return $cur_lot;
+    }
+    return mysqli_fetch_array($result, MYSQLI_ASSOC);
 };
 
 $get_raties = function ($link, $lot_id) {
@@ -107,12 +99,9 @@ $get_raties = function ($link, $lot_id) {
 
     if (!$result) {
         print("Ошибочка " . mysqli_connect_error());
-    } else {
-        $cur_raties = mysqli_fetch_all($result, MYSQLI_ASSOC);
-    };
-    return $cur_raties;
+    }
+    return mysqli_fetch_all($result, MYSQLI_ASSOC);
 };
-
 
 $get_id_category = function ($link, $name_category) {
     $sql = "SELECT id FROM categories WHERE name = '$name_category'";
@@ -148,10 +137,7 @@ $add_photo = function ($link, $photo) {
     if (!$result) {
         print("Ошибочка " . mysqli_connect_error());
     }
-    else {
-        $add_phot = mysqli_fetch_array($result, MYSQLI_ASSOC);
-    }
-    return $add_phot;
+    return mysqli_fetch_array($result, MYSQLI_ASSOC);
 };
 
 function db_get_prepare_stmt($link, $sql, $data = []) {
@@ -189,18 +175,32 @@ function db_get_prepare_stmt($link, $sql, $data = []) {
     return $stmt;
 }
 
-
 $get_email = function ($link,$email) {
     $sql = "SELECT email FROM users WHERE email = '$email'";
-
     $result = mysqli_query($link, $sql);
-    $is_set = mysqli_fetch_array($result, MYSQLI_ASSOC);
-    return $is_set;
+    return mysqli_fetch_array($result, MYSQLI_ASSOC);
 };
 
-$add_rate = function ($link, $lot_id) {
-    $sql = 'INSERT INTO lot (amount, users_id, lot_id) VALUES (?, ?, ?)';
-    $stmt = db_get_prepare_stmt($link, $sql, [$new_lot_add["cost"], $new_lot_add["description"], $new_lot_add["path"],$new_lot_add["start_price"], $new_lot_add["step_price"], $id_category, $new_lot_add["lot-date"]]);
-    $res = mysqli_stmt_execute($stmt);
-    return $res;
+$add_lot = function ($link, $new_lot_add, $id_category, $user_id) {
+    $sql = 'INSERT INTO lot ( lot.name, lot.description, image, start_price, step_price, categories_id, dt_close,  users_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+    $stmt = db_get_prepare_stmt($link, $sql, [$new_lot_add["lot-name"], $new_lot_add["description"], $new_lot_add["path"],$new_lot_add["start_price"], $new_lot_add["step_price"], $id_category, $new_lot_add["lot-date"], $user_id]);
+    return mysqli_stmt_execute($stmt);
+};
+
+$add_rate = function ($link, $form) {
+    $sql = "INSERT INTO rate (amount, users_id, lot_id) VALUES (?,?,?)";
+    $stmt = db_get_prepare_stmt($link, $sql, [$form["cost"], $_SESSION["user"]["id"], $_SESSION["user"]["lot_id"]]);
+    return mysqli_stmt_execute($stmt);
+};
+
+$update_rate_to_user = function ($link,$id_rate) {
+    $sql = "UPDATE users SET rate_id=(?) WHERE id = (?)";
+    $stmt = db_get_prepare_stmt($link, $sql, [$id_rate,[$_SESSION["user"]["id"]]]);
+    return mysqli_stmt_execute($stmt);
+};
+
+$get_id_user = function ($link, $user_id) {
+    $sql = "SELECT id FROM users WHERE email = '$user_id'";
+    $result = mysqli_query($link, $sql);
+    return mysqli_fetch_array($result, MYSQLI_ASSOC);
 };

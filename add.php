@@ -70,12 +70,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $new_lot_add["path"] = "img/" . $new_lot_add["path"];
         $user_id = $_SESSION["user"]["id"];
         unset($_SESSION["user"]["errors"]);
-        $sql = 'INSERT INTO lot (lot.name, lot.description, image, start_price, step_price, categories_id, dt_close,  users_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
-        $stmt = db_get_prepare_stmt($link, $sql, [$new_lot_add["lot-name"], $new_lot_add["description"], $new_lot_add["path"],$new_lot_add["start_price"], $new_lot_add["step_price"], $id_category, $new_lot_add["lot-date"], $user_id]);
-        $res = mysqli_stmt_execute($stmt);
-        if ($res) {
+        $add = $add_lot($link, $new_lot_add, $id_category, $user_id);
+        if ($add) {
             $new_lot_add = mysqli_insert_id($link);
-
             header("Location: lot.php?lot_id=" . $new_lot_add);
         }
         else {

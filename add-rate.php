@@ -17,12 +17,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if (!$error && ctype_digit($form["cost"]) ) {
         $cost = mysqli_real_escape_string($link, $form["cost"]);
-        $sql = "INSERT INTO rate (amount, users_id, lot_id) VALUES (?,?,?)";
-        $stmt = db_get_prepare_stmt($link, $sql, [$form["cost"], $_SESSION["user"]["id"], $_SESSION["user"]["lot_id"]]);
-        $res = mysqli_stmt_execute($stmt);
+        $rate = $add_rate($link, $form);
+        var_dump($_SESSION);
+        $user_id = $_SESSION["user"]["id"];
+        $sql = "SELECT id FROM rate WHERE  users_id = '$user_id'";
+        $result = mysqli_query($link, $sql);
+        $id_rate = mysqli_fetch_array($result, MYSQLI_ASSOC);
+
+        $user_id = $update_rate_to_user($link, $id_rate);
         unset($_SESSION["user"]["errors"]);
 
-       header("Location: lot.php?lot_id=" . $_SESSION["user"]["lot_id"]);
+       //header("Location: lot.php?lot_id=" . $_SESSION["user"]["lot_id"]);
 
     } else {
         $error = "Введите корректную ставку";

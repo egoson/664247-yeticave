@@ -11,7 +11,6 @@ $is_error = true;
 
 if ($_GET["lot_id"]) {
     $lot = $get_lot($link, $_GET["lot_id"]);
-    var_dump($lot);
     $categories = $get_categories($link);
     $raties = $get_raties($link, $lot["lot_id"]);
 
@@ -19,6 +18,9 @@ if ($_GET["lot_id"]) {
     $_SESSION["user"]["lot_id"] = $lot["lot_id"];
     $_SESSION["user"]["rate"] = min_rate($lot["r_amount"],$lot["step_price"]);
     $_SESSION["user"]["start_price"] = $lot["start_price"];
+
+   // if ($_SESSION["user"]["user"] && $lot["dt_add"] > time(NOW) && )
+
 
     if ($_GET["lot_id"] === $lot["lot_id"]) {
         $is_error = false;
