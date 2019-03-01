@@ -1,6 +1,11 @@
 <?php
 require_once ("functions.php");
 require_once ("init.php");
+session_start();
+
+if(!$_SESSION) {
+    header("Location: 404.php");
+}
 
 $categories =  $get_categories($link);
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -14,10 +19,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $errors[$key] = "Это поле надо заполнить";
         }
     }
-
-
-
-
 
     if (isset($new_lot["step_price"]) && $new_lot["step_price"] > 0 && ctype_digit($new_lot["step_price"])) {
         $step_price = $new_lot["step_price"];
@@ -67,8 +68,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         move_uploaded_file($_FILES["photo"]["tmp_name"], 'img/' . $filename);
         $id_category = $get_id_category($link,$new_lot_add["category"]);
         $new_lot_add["path"] = "img/" . $new_lot_add["path"];
-        $sql = 'INSERT INTO lot (lot.name, lot.description, image, start_price, step_price, categories_id, dt_close,  users_id, win_id) VALUES (?, ?, ?, ?, ?, ?, ?, 1, 1)';
-        $stmt = db_get_prepare_stmt($link, $sql, [$new_lot_add["lot-name"], $new_lot_add["description"], $new_lot_add["path"],$new_lot_add["start_price"], $new_lot_add["step_price"], $id_category, $new_lot_add["lot-date"]]);
+        $user_id = $_SESSION["user"]["id"];
+        unset($_SESSION["user"]["errors"]);
+        $sql = 'INSERT INTO lot (lot.name, lot.description, image, start_price, step_price, categories_id, dt_close,  users_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+        $stmt = db_get_prepare_stmt($link, $sql, [$new_lot_add["lot-name"], $new_lot_add["description"], $new_lot_add["path"],$new_lot_add["start_price"], $new_lot_add["step_price"], $id_category, $new_lot_add["lot-date"], $user_id]);
         $res = mysqli_stmt_execute($stmt);
         if ($res) {
             $new_lot_add = mysqli_insert_id($link);
@@ -78,8 +81,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         else {
             $content = include_template('error.php', ['error' => mysqli_error($link)]);
         }
+
     }
-var_dump($errors);
+
+
     if (count($errors)) {
         $page_content = include_template("add.php", ["image" => $image,
             "errors" => $errors,
@@ -100,8 +105,6 @@ var_dump($errors);
     }
 }
 
-
-
 else {
     $categories =  $get_categories($link);
     $page_content = include_template('add.php', ["equipments" => $categories]);
@@ -112,20 +115,20 @@ if (!$link) {
     die();
 };
 
-
-$is_auth = rand(0, 1);
-$title_name = "Добавить лот";
-$user_name = "Денис Филипкин";
-date_default_timezone_set("Europe/Moscow");
-setlocale(LC_ALL, 'ru_RU');
+    $title_name = "Добавить лот";
+    $user_name = $_SESSION['user']['name'];
+    date_default_timezone_set("Europe/Moscow");
+    setlocale(LC_ALL, 'ru_RU');
 
 
+    $content = include_template('error.php', ['error' => mysqli_error($link)]);
 
-$layout_content = include_template("layout.php", [
-    "content" => $page_content,
-    "user" => $user_name,
-    "title" => $title_name,
-    "is_auth" => $is_auth,
-    "equipments" => $categories
-]);
-print ($layout_content);
+    $layout_content = include_template("layout.php", [
+        "content" => $page_content,
+        "user" => $user_name,
+        "title" => $title_name,
+        "is_auth" => $is_auth,
+        "equipments" => $categories
+    ]);
+    print ($layout_content);
+

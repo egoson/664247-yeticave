@@ -184,3 +184,18 @@ function db_get_prepare_stmt($link, $sql, $data = []) {
 
     return $stmt;
 }
+
+$get_email = function ($link,$email) {
+    $sql = "SELECT email FROM users WHERE email = '$email'";
+
+    $result = mysqli_query($link, $sql);
+    $is_set = mysqli_fetch_array($result, MYSQLI_ASSOC);
+    return $is_set;
+};
+
+$add_rate = function ($link, $lot_id) {
+    $sql = 'INSERT INTO lot (amount, users_id, lot_id) VALUES (?, ?, ?)';
+    $stmt = db_get_prepare_stmt($link, $sql, [$new_lot_add["cost"], $new_lot_add["description"], $new_lot_add["path"],$new_lot_add["start_price"], $new_lot_add["step_price"], $id_category, $new_lot_add["lot-date"]]);
+    $res = mysqli_stmt_execute($stmt);
+    return $res;
+};

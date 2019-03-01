@@ -20,6 +20,7 @@
                 <p class="lot-item__description"><?=$lot["description"];?></p>
             </div>
             <div class="lot-item__right">
+                <?php if ($_SESSION['user']['name']): ?>
                 <div class="lot-item__state">
                     <div class="lot-item__timer timer">
                         10:54
@@ -33,15 +34,17 @@
                             Мин. ставка <span><?=min_rate($lot["r_amount"],$lot["step_price"]); ?></span>
                         </div>
                     </div>
-                    <form class="lot-item__form" action="https://echo.htmlacademy.ru" method="post">
-                        <p class="lot-item__form-item form__item form__item--invalid">
+                    <form class="lot-item__form" action="add-rate.php" method="post">
+                        <?php $classname = isset($_SESSION["user"]["errors"]) ? "form__item--invalid" : "";?>
+                        <p class="lot-item__form-item form__item  <?=$classname;?>">
                             <label for="cost">Ваша ставка</label>
                             <input id="cost" type="text" name="cost" placeholder="<?=min_rate($lot["r_amount"],$lot["step_price"]); ?>>
-                            <span class="form__error">Введите наименование лота</span>
+                            <span >Сделайте ставку</span>
                         </p>
                         <button type="submit" class="button">Сделать ставку</button>
                     </form>
                 </div>
+                <?php endif; ?>
                 <div class="history">
                     <h3>История ставок (<span>6</span>)</h3>
                     <table class="history__list">

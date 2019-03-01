@@ -8,26 +8,31 @@
             <?php endforeach; ?>
         </ul>
     </nav>
-    <form class="form container " enctype="multipart/form-data" action="sign-up.php" name="signup" method="post"> <!-- form--invalid -->
+    <?php $classname = isset($errors) ? "form--invalid" : "";?>
+    <form class="form container <?=$classname;?>" enctype="multipart/form-data" action="sign-up.php" name="signup" method="post"> <!-- form--invalid -->
         <h2>Регистрация нового аккаунта</h2>
-        <div class="form__item"> <!-- form__item--invalid -->
+        <?php $classname = isset($errors["email"]) ? "form__item--invalid" : "";?>
+        <div class="form__item <?=$classname;?>"> <!-- form__item--invalid -->
             <label for="email">E-mail*</label>
             <input id="email" type="text" name="email" placeholder="Введите e-mail" value="<?=$values['email'] ?? ''; ?>" >
             <span class="form__error">Введите e-mail</span>
         </div>
-        <div class="form__item">
+        <?php $classname = isset($errors["password"]) ? "form__item--invalid" : "";?>
+        <div class="form__item <?=$classname;?>">
             <label for="password">Пароль*</label>
             <input id="password" type="text" name="password" placeholder="Введите пароль">
             <span class="form__error">Введите пароль</span>
         </div>
-        <div class="form__item">
+        <?php $classname = isset($errors['name']) ? "form__item--invalid" : "";?>
+        <div class="form__item <?=$classname;?>">
             <label for="name">Имя*</label>
             <input id="name" type="text" name="name" placeholder="Введите имя" value="<?=$values['name'] ?? ''; ?>" >
             <span class="form__error">Введите имя</span>
         </div>
-        <div class="form__item">
+        <?php $classname = isset($errors['contacts']) ? "form__item--invalid" : "";?>
+        <div class="form__item <?=$classname;?>">
             <label for="message">Контактные данные*</label>
-            <textarea id="message" name="contacts" placeholder="Напишите как с вами связаться" ></textarea>
+            <textarea id="message" name="contacts" placeholder="Напишите как с вами связаться" ><?=$values['contacts'] ?? ''; ?></textarea>
             <span class="form__error">Напишите как с вами связаться</span>
         </div>
         <div class="form__item form__item--file form__item--last">

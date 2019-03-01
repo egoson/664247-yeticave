@@ -1,7 +1,7 @@
 <?php
 require_once ("functions.php");
 require_once ("init.php");
-
+session_start();
 
 
 $tpl_data = [];
@@ -14,34 +14,32 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     foreach ($req_fields as $field) {
         if (empty($form[$field])) {
-            $errors[] = "Не заполнено поле " . $field;
-
+            $errors[$field] = "Не заполнено поле " . $field;
         }
     }
-    var_dump($errors);
+
     if (empty($errors)) {
         $email = mysqli_real_escape_string($link, $form['email']);
-        $sql = "SELECT email FROM users WHERE email = '$email'";
-        $result = mysqli_fetch_array($link, $sql);
-        var_dump($result);
-        if ($result) {
-            $errors[] = 'Пользователь с этим email уже зарегистрирован';
-            var_dump($result);
+        $is_set = $get_email($link,$email);
+        if ($is_set) {
+            $errors['email'] = 'Пользователь с этим email уже зарегистрирован';
         } else {
             $password = password_hash($form['password'], PASSWORD_DEFAULT);
-            $sql = 'INSERT INTO users (email, users.password, users.name, contacts) VALUES (?, ?, ?, ?)';
-            $stmt = db_get_prepare_stmt($link, $sql, [$form['email'], $password, $form['name'], $form['contacts'] ]);
-            $res = mysqli_stmt_execute($stmt);
+
+
+
+                $sql = 'INSERT INTO users (email, users.password, users.name, contacts) VALUES (?, ?, ?, ?)';
+                $stmt = db_get_prepare_stmt($link, $sql, [$form['email'], $password, $form['name'], $form['contacts']]);
+                $res = mysqli_stmt_execute($stmt);
+
 
             if($res && empty($errors)) {
                 header("Location: /login.php");
                 exit();
             }
         }
-
         $tpl_data['errors'] = $errors;
         $tpl_data['values'] = $form;
-
     }
 
 }
@@ -65,7 +63,9 @@ setlocale(LC_ALL, 'ru_RU');
 
 
 $page_content = include_template("sign-up.php", [
-    'equipments' => $categories
+    'equipments' => $categories,
+    "errors" => $errors,
+    "values" => $form
 ]);
 $layout_content = include_template("layout.php", [
     'content' => $page_content,
