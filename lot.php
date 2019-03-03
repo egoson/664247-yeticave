@@ -10,17 +10,21 @@ if (!$link) {
 $is_error = true;
 
 if ($_GET["lot_id"]) {
+    $lot_id = $_GET["lot_id"];
+
+
     $lot = $get_lot($link, $_GET["lot_id"]);
     $categories = $get_categories($link);
     $raties = $get_raties($link, $lot["lot_id"]);
-
+    $_SESSION["user"]["cur_lot_id"] = $lot_id;
+    $_SESSION["user"]["dt_add"] = $lot["dt_add"];
     $_SESSION["user"]["url"] = "lot.php?lot_id=" . $lot["lot_id"];
-    $_SESSION["user"]["lot_id"] = $lot["lot_id"];
     $_SESSION["user"]["rate"] = min_rate($lot["r_amount"],$lot["step_price"]);
     $_SESSION["user"]["start_price"] = $lot["start_price"];
+    $is_lot_user = $_SESSION["user"]["lot_id"] == $_SESSION["user"]["cur_lot_id"] ? true : false ;
 
-   // if ($_SESSION["user"]["user"] && $lot["dt_add"] > time(NOW) && )
-
+    $dt_close = $lot["dt_close"];
+    $_SESSION["user"]["dt_close"] = $dt_close;
 
     if ($_GET["lot_id"] === $lot["lot_id"]) {
         $is_error = false;

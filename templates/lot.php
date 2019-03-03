@@ -46,13 +46,13 @@
                 </div>
                 <?php endif; ?>
                 <div class="history">
-                    <h3>История ставок (<span>6</span>)</h3>
+                    <h3>История ставок (<span><?php print(count($raties))?></span>)</h3>
                     <table class="history__list">
                         <?php  foreach ($raties as $rate): ?>
                         <tr class="history__item">
                             <td class="history__name"><?=$rate["name"];?></td>
                             <td class="history__price"><?=do_price($rate["amount"], false);?></td>
-                            <td class="history__time">5 минут назад</td>
+                            <td class="history__time"><?=print($rate["dt_add"])?></td>
                         </tr>
                         <?php endforeach; ?>
                     </table>

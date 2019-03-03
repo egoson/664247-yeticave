@@ -15,7 +15,6 @@ $user_name = $_SESSION['user']['name'];
 date_default_timezone_set("Europe/Moscow");
 setlocale(LC_ALL, 'ru_RU');
 
-
 $page_content = include_template("index.php", [
     'equipments' => $categories,
     'announcement' => $lot

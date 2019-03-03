@@ -71,9 +71,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $user_id = $_SESSION["user"]["id"];
         unset($_SESSION["user"]["errors"]);
         $add = $add_lot($link, $new_lot_add, $id_category, $user_id);
+
+        $id_lot = $get_id_lot($link,$user_id);
+        $lot_use_updated = $update_lot_to_user($link, $id_lot["id"], $user_id);
         if ($add) {
             $new_lot_add = mysqli_insert_id($link);
-            header("Location: lot.php?lot_id=" . $new_lot_add);
+            header("Location: lot.php?lot_id=" . $id_lot["id"]);
         }
         else {
             $content = include_template('error.php', ['error' => mysqli_error($link)]);
