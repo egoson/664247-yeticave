@@ -46,7 +46,7 @@ function do_price($price, $rub = true)
  * @return string
  */
 function do_time_rate($raties) {
-    $difference_time = time(NOW) - strtotime($raties) + 3600;
+    $difference_time = time() - strtotime($raties) + 3600;
     if ($difference_time < 60) {
         $time_rate = "только что";
     }  elseif ($difference_time >= 60 && $difference_time < 3600) {
@@ -223,10 +223,7 @@ $get_category = function ($link, $name_category) {
     if (!$result) {
         print("Ошибочка " . mysqli_connect_error());
     }
-    else {
-        $categories = mysqli_fetch_array($result, MYSQLI_ASSOC);
-    }
-    return $categories["name"];
+    return $categories = mysqli_fetch_array($result, MYSQLI_ASSOC);
 };
 
 /**

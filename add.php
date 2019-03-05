@@ -6,8 +6,14 @@ session_start();
 if(!$_SESSION["user"]["id"]) {
     header("Location: 404.php");
 }
-
+error_reporting(E_ALL);
 $categories =  $get_categories($link);
+$is_auth = "";
+$step_price = "";
+$start_price = "";
+$category = null;
+$file = "";
+$lot_date = "";
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     $new_lot = $_POST;
@@ -41,14 +47,16 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if (isset($new_lot["lot-name"])) {
         $lot_name = $new_lot["lot-name"];
     }
+    $category = $get_category($link, $new_lot["category"]);
 
-    if (isset($new_lot["category"]) && $new_lot["category"] == $get_category($link, $new_lot["category"])) {
+    if (isset($new_lot["category"]) && $new_lot["category"] === $category["name"]) {
         $category = $new_lot["category"];
     } else {
         $errors["categories"] = "Нужно выбрать категорию";
     }
 
     $new_lot["lot-date"] = date("d.m.Y", strtotime($new_lot["lot-date"]));
+
     if (isset($new_lot["lot-date"]) && check_date_format($new_lot["lot-date"]) && strtotime($new_lot["lot-date"]) > strtotime("now")) {
         $lot_date = date('Y-m-d',strtotime($new_lot["lot-date"]));
     } else {

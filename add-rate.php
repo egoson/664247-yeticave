@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (empty($form["cost"])) {
         $error = "Заполните это поле";
     }
-
+    $error = "";
     if (!$error && ctype_digit($form["cost"]) && $form["cost"] >= $min_rate) {
         $cost = mysqli_real_escape_string($link, $form["cost"]);
         $rate = $add_rate($link, $form);

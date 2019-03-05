@@ -21,7 +21,7 @@
             <a class="main-header__add-lot button" href="add.php">Добавить лот</a>
 
             <nav class="user-menu">
-                <?php if ($_SESSION["user"]["name"]): ?>
+                <?php if (isset($_SESSION["user"]["name"])): ?>
                     <div class="user-menu__logged">
                         <p><?=$user?></p>
                         <a href="logout.php">Выйти</a>

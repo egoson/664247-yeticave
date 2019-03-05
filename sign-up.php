@@ -2,10 +2,14 @@
 require_once ("functions.php");
 require_once ("init.php");
 session_start();
-
-
+error_reporting(E_ALL);
+if (!$link) {
+    print("Ошибка: невозможно подключиться к MySQL " . mysqli_connect_error());
+    die();
+};
 $tpl_data = [];
-
+$errors = null;
+$form = "";
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $form = $_POST;
     $errors = [];
@@ -50,10 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 
 
-if (!$link) {
-    print("Ошибка: невозможно подключиться к MySQL " . mysqli_connect_error());
-    die();
-}
+
 
 
 

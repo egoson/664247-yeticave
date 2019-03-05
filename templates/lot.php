@@ -20,7 +20,7 @@
                 <p class="lot-item__description"><?=$lot["description"];?></p>
             </div>
             <div class="lot-item__right">
-                <?php if ($_SESSION['user']['name'] && !$checked_rate && !$is_users_lot): ?>
+                <?php if (isset($_SESSION['user']['name']) && !$checked_rate && !$is_users_lot): ?>
                 <div class="lot-item__state">
                     <div class="lot-item__timer timer">
                         10:54
