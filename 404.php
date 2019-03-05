@@ -10,9 +10,8 @@ if (!$link) {
 $categories =  $get_categories($link);
 
 
-$is_auth = rand(0, 1);
 $title_name = "404";
-$user_name = 'Денис Филипкин';
+$user_name = $_SESSION['user']['name'];
 date_default_timezone_set("Europe/Moscow");
 setlocale(LC_ALL, 'ru_RU');
 

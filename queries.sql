@@ -1,8 +1,9 @@
 INSERT INTO categories (name) VALUES ("Доски и лыжи"), ("Крепления"), ("Ботинки"), ("Одежда"), ("Инструменты"), ("Разное"); -- добавляет категории в таблицу категорий
 
-INSERT INTO users (email, name, contacts, avatar, lot_id, rate_id) VALUES -- добавляет пользователей в таблицу пользователей
+INSERT INTO users (email,users.password, name, contacts, avatar, lot_id, rate_id) VALUES -- добавляет пользователей в таблицу пользователей
   (
     "egoson@mail.ru",
+    "sda112",
     "Den",
     "89041989999",
     "hhjsj.ss",
@@ -11,6 +12,7 @@ INSERT INTO users (email, name, contacts, avatar, lot_id, rate_id) VALUES -- д�
   ),
   (
     "myson@mail.ru",
+    "sda112",
     "Daha",
     "89021989999",
     "hhjsj.sss",
@@ -19,6 +21,7 @@ INSERT INTO users (email, name, contacts, avatar, lot_id, rate_id) VALUES -- д�
   ),
   (
     "oson@mail.ru",
+    "sda112",
     "Vanyz",
     "890419999",
     "hhjssj.ss",
@@ -27,6 +30,7 @@ INSERT INTO users (email, name, contacts, avatar, lot_id, rate_id) VALUES -- д�
   ),
   (
     "on@mail.ru",
+    "sda112",
     "Datt",
     "89021289999",
     "hhj11sj.sss",
