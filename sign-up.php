@@ -18,6 +18,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     }
 
+    if (!filter_var($form["email"], FILTER_VALIDATE_EMAIL)) {
+        $errors['email'] = "Неверно введен email адрес";
+    }
+
+
     if (empty($errors)) {
         $email = mysqli_real_escape_string($link, $form['email']);
         $is_set = $get_email($link,$email);

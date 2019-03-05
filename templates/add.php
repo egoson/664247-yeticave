@@ -46,7 +46,7 @@
         <span class="form__error">Напишите описание лота</span>
       </div>
         <?php
-        $classname = isset($errors["file"]) ? "form__item--invalid" : "";
+        $classname = isset($errors["photo"]) ? "form__item--invalid" : "";
         ?>
       <div class="form__item form__item--file <?=$classname?>"> <!-- form__item--uploaded -->
         <label>Изображение</label>
@@ -62,7 +62,7 @@
             <span>+ Добавить</span>
           </label>
         </div>
-          <span class="form__error"><?=$errors["file"];?></span>
+          <span class="form__error"><?=$errors["photo"];?></span>
       </div>
       <div class="form__container-three">
           <?php

@@ -16,10 +16,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $errors[$field] = "Это поле надо заполнить";
         }
     }
-        $email = mysqli_real_escape_string($link, $form['email']);
-        $sql = "SELECT * FROM users WHERE email = '$email'";
-        $result = mysqli_query($link, $sql);
-        $user = $result ? mysqli_fetch_array($result, MYSQLI_ASSOC) : null;
+
+    $email = mysqli_real_escape_string($link, $form['email']);
+    $sql = "SELECT * FROM users WHERE email = '$email'";
+    $result = mysqli_query($link, $sql);
+    $user = $result ? mysqli_fetch_array($result, MYSQLI_ASSOC) : null;
 
     if(!count($errors) and $user) {
         if (password_verify($form['password'], $user['password'])) {

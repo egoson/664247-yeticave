@@ -3,14 +3,16 @@ require_once ("functions.php");
 require_once ("init.php");
 session_start();
 
-if(!$_SESSION) {
+if(!$_SESSION["user"]["id"]) {
     header("Location: 404.php");
 }
 
 $categories =  $get_categories($link);
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+
     $new_lot = $_POST;
-    $required = ["lot-name", "description", "start_price", "step_price", "close_sale", "category", "photo", "lot-date"];
+
+    $required = ["lot-name", "description", "start_price", "step_price", "lot-date", "category", "lot-date"];
     $dict = ["lot-name" => "Имя лота", "description" => "Описание", "photo" => "Изображение", "start_price" => "Начальная цена", "step_price" => "Шаг ставки", "lot-date" => "Дата окончания торгов", "category" => "Категория"];
     $errors = [];
 
@@ -26,7 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $errors["step_price"] = "введите корректное число";
     }
 
-    if (isset($new_lot["start_price"]) && ctype_digit($new_lot["start_price"])) {
+    if (isset($new_lot["start_price"]) && $new_lot["start_price"] > 0 && ctype_digit($new_lot["start_price"])) {
         $start_price = $new_lot["start_price"];
     } else {
         $errors["start_price"] = "введите корректное число";
@@ -52,41 +54,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } else {
         $errors["lot-date"] = "Введите корректную дату торгов";
     }
-    if (isset($_FILES["photo"])) {
-        $new_lot_add = $_POST;
-        $tmp_name = $_FILES['photo']['tmp_name'];
 
+    if (!empty($_FILES["photo"]["name"])) {
+        $file = $_FILES["photo"];
+        $tmp_name = $_FILES['photo']['tmp_name'];
         $finfo = finfo_open(FILEINFO_MIME_TYPE);
         $file_type = finfo_file($finfo, $tmp_name);
-        if ($file_type !== "jpg") {
-            $errors["file"] = 'Загрузите картинку формата JPG';
+        if ($file_type !== "image/jpeg") {
+            $errors["photo"] = 'Загрузите картинку формата JPG';
+        } else {
+            $filename = uniqid() . ".jpg";
+            $new_lot["path"] = $filename;
+            move_uploaded_file($_FILES["photo"]["tmp_name"], 'img/' . $filename);
+            $id_category = $get_id_category($link, $new_lot["category"]);
+            $new_lot["path"] = "img/" . $new_lot["path"];
+            $user_id = $_SESSION["user"]["id"];
+
+
         }
-
-
-        $filename = uniqid() . ".jpg";
-        $new_lot_add["path"] = $filename;
-        move_uploaded_file($_FILES["photo"]["tmp_name"], 'img/' . $filename);
-        $id_category = $get_id_category($link,$new_lot_add["category"]);
-        $new_lot_add["path"] = "img/" . $new_lot_add["path"];
-        $user_id = $_SESSION["user"]["id"];
-        unset($_SESSION["user"]["errors"]);
-        $add = $add_lot($link, $new_lot_add, $id_category, $user_id);
-
-        $id_lot = $get_id_lot($link,$user_id);
-        $lot_use_updated = $update_lot_to_user($link, $id_lot["id"], $user_id);
-        if ($add) {
-            $new_lot_add = mysqli_insert_id($link);
-            header("Location: lot.php?lot_id=" . $id_lot["id"]);
-        }
-        else {
-            $content = include_template('error.php', ['error' => mysqli_error($link)]);
-        }
-
+    } else {
+        $errors["photo"] = 'Загрузите картинку';
     }
 
-
     if (count($errors)) {
-        $page_content = include_template("add.php", ["image" => $image,
+        $page_content = include_template("add.php", [
             "errors" => $errors,
             "dict" => $dict,
             "equipments" => $categories,
@@ -96,12 +87,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             "lot_name_cur" => $lot_name,
             "category_cur" => $category,
             "lot_date_cur" => $lot_date,
-            "file_err" => $file
+            "photo" => $file
         ]);
     }
+
+
+
     else {
-        //сформировать запрос на страницу с добавленным лотом
-        $page_content = include_template("lot.php", ["image" => $image]);
+
+        $add = $add_lot($link, $new_lot, $id_category, $user_id);
+        $lot_id = $get_id_lot($link, $user_id);
+
+        header("Location: lot.php?lot_id=" . $lot_id["id"]);
     }
 }
 

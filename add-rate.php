@@ -11,37 +11,20 @@ if (!$link) {
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $form = $_POST;
+    $min_rate = $_SESSION["user"]["min_rate"];
+
     if (empty($form["cost"])) {
         $error = "Заполните это поле";
     }
 
-    if (!$error && ctype_digit($form["cost"]) ) {
+    if (!$error && ctype_digit($form["cost"]) && $form["cost"] >= $min_rate) {
         $cost = mysqli_real_escape_string($link, $form["cost"]);
         $rate = $add_rate($link, $form);
         $user_id = $_SESSION["user"]["id"];
-
         $id_rate = $get_userid_from_lot($link, $user_id);
-        unset($_SESSION["user"]["errors"]);
-        $cur_lot = $_SESSION["user"]["cur_lot_id"];
-        $users_lot = $get_users_lot($link, $user_id);
-        $is_users_lot = $users_lot["lot_id"] === $cur_lot ? true : false ;
-        $dt_close = $_SESSION["user"]["dt_close"];
-        $user_dt_add = ($_SESSION["user"]["dt_add"]);
-        $checked_rate = $get_check_rate($link, $users_lot["lot_id"], $user_id);
+
         $user_id_updated = $update_rate_to_user($link, $id_rate["id"], $user_id);
-
-
-        // вот тут-то я и застрял
-
-        //var_dump($user_id && strtotime($dt_close) > time(NOW) && !$is_users_lot && !$checked_rate);
-        if(!$user_id && strtotime($dt_close) > time(NOW) && $is_users_lot && $checked_rate) {
-            echo ("sdadadsadsadsada");
-
-        }
-            unset($_SESSION["user"]["errors"]);
-            header("Location: lot.php?lot_id=" . $_SESSION["user"]["cur_lot_id"]);
-
-
+        header("Location: lot.php?lot_id=" . $_SESSION["user"]["cur_lot_id"]);
     } else {
         $error = "Введите корректную ставку";
         $_SESSION["user"]["errors"] = $error;
