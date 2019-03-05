@@ -103,7 +103,7 @@ function check_date_format($date) {
  * @param $link
  * @return array|null
  */
-$get_categories = function ($link) {
+function get_categories($link) {
 
     $sql = "SELECT name FROM categories";
     $result = mysqli_query($link, $sql);
@@ -120,7 +120,7 @@ $get_categories = function ($link) {
  * @param $link
  * @return array|null
  */
-$get_lots = function ($link) {
+function get_lots($link) {
 
     $sql = "SELECT l.id as lot_id, image, l.name, start_price, c.name AS categories_name, MAX(r.amount) AS r_amount FROM lot AS l
     JOIN categories AS c ON l.categories_id = c.id
@@ -141,7 +141,7 @@ $get_lots = function ($link) {
  * @param $link
  * @return array|null
  */
-$get_lot = function ($link, $lot_id) {
+function get_lot($link, $lot_id) {
 
     $sql = "SELECT l.id as lot_id, l.dt_add, image, dt_close, l.name, l.description, start_price, c.name AS categories_name, MAX(r.amount) AS r_amount, l.step_price, l.users_id FROM lot AS l
     JOIN categories AS c ON l.categories_id = c.id
@@ -160,7 +160,7 @@ $get_lot = function ($link, $lot_id) {
  * @param $link
  * @return array|null
  */
-$get_raties = function ($link, $lot_id) {
+function get_raties($link, $lot_id) {
     $sql = "SELECT r.id as rate_id, l.id AS lot_id, r.users_id as rate_user, u.name, r.dt_add, r.amount FROM rate AS r
     JOIN users AS u ON u.id = r.users_id
     JOIN lot AS l ON l.id = r.lot_id
@@ -179,7 +179,7 @@ $get_raties = function ($link, $lot_id) {
  * @param $link
  * @return array|null
  */
-$get_max_rate = function ($link, $lot_id) {
+function get_max_rate($link, $lot_id) {
     $sql = "SELECT MAX(r.amount) AS max_amount FROM rate AS r
   
     JOIN lot AS l ON l.id = r.lot_id
@@ -197,7 +197,7 @@ $get_max_rate = function ($link, $lot_id) {
  * @param $link
  * @return array|null
  */
-$get_id_category = function ($link, $name_category) {
+function get_id_category($link, $name_category) {
     $sql = "SELECT id FROM categories WHERE name = '$name_category'";
     $result = mysqli_query($link, $sql);
 
@@ -215,7 +215,7 @@ $get_id_category = function ($link, $name_category) {
  * @param $link
  * @return array|null
  */
-$get_category = function ($link, $name_category) {
+function get_category($link, $name_category) {
 
     $sql = "SELECT name FROM categories WHERE name = '$name_category'";
     $result = mysqli_query($link, $sql);
@@ -231,7 +231,7 @@ $get_category = function ($link, $name_category) {
  * @param $link
  * @return array|null
  */
-$add_photo = function ($link, $photo) {
+function add_photo($link, $photo) {
     $sql = "INSERT INTO lot (image) VALUES ($photo)";
     $result = mysqli_query($link, $sql);
 
@@ -289,7 +289,7 @@ function db_get_prepare_stmt($link, $sql, $data = []) {
  * @param $link
  * @return array|null
  */
-$get_email = function ($link,$email) {
+function get_email($link,$email) {
     $sql = "SELECT email FROM users WHERE email = '$email'";
     $result = mysqli_query($link, $sql);
     return mysqli_fetch_array($result, MYSQLI_ASSOC);
@@ -300,9 +300,9 @@ $get_email = function ($link,$email) {
  * @param $link
  * @return array|null
  */
-$add_lot = function ($link, $new_lot_add, $id_category, $user_id) {
+function add_lot($link, $new_lot, $id_category, $user_id) {
     $sql = 'INSERT INTO lot ( lot.name, lot.description, image, start_price, step_price, categories_id, dt_close,  users_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
-    $stmt = db_get_prepare_stmt($link, $sql, [$new_lot_add["lot-name"], $new_lot_add["description"], $new_lot_add["path"],$new_lot_add["start_price"], $new_lot_add["step_price"], $id_category, $new_lot_add["lot-date"], $user_id]);
+    $stmt = db_get_prepare_stmt($link, $sql, [$new_lot["lot-name"], $new_lot["description"], $new_lot["path"],$new_lot["start_price"], $new_lot["step_price"], $id_category, $new_lot["lot-date"], $user_id]);
     return mysqli_stmt_execute($stmt);
 };
 
@@ -311,29 +311,20 @@ $add_lot = function ($link, $new_lot_add, $id_category, $user_id) {
  * @param $link
  * @return array|null
  */
-$add_rate = function ($link, $form) {
+function add_rate($link, $form) {
     $sql = "INSERT INTO rate (amount, users_id, lot_id) VALUES (?,?,?)";
     $stmt = db_get_prepare_stmt($link, $sql, [$form["cost"], $_SESSION["user"]["id"], $_SESSION["user"]["cur_lot_id"]]);
     return mysqli_stmt_execute($stmt);
 };
 
-/**
- * Функция обновляет данные в БД
- * @param $link
- * @return array|null
- */
-$update_rate_to_user = function ($link, $id_rate, $id_user) {
-    $sql = "UPDATE users SET rate_id=(?) WHERE id = (?)";
-    $stmt = db_get_prepare_stmt($link, $sql, [$id_rate, $id_user]);
-    return mysqli_stmt_execute($stmt);
-};
+
 
 /**
  * Функция возвращает данные из БД
  * @param $link
  * @return array|null
  */
-$get_id_user = function ($link, $user_id) {
+function get_id_user($link, $user_id) {
     $sql = "SELECT id FROM users WHERE email = '$user_id'";
     $result = mysqli_query($link, $sql);
     return mysqli_fetch_array($result, MYSQLI_ASSOC);
@@ -344,7 +335,7 @@ $get_id_user = function ($link, $user_id) {
  * @param $link
  * @return array|null
  */
-$update_lot_to_user = function ($link, $id_lot, $id_user) {
+function update_lot_to_user($link, $id_lot, $id_user) {
     $sql = "UPDATE users SET lot_id=(?) WHERE id = (?)";
     $stmt = db_get_prepare_stmt($link, $sql, [$id_lot, $id_user]);
     return mysqli_stmt_execute($stmt);
@@ -355,7 +346,7 @@ $update_lot_to_user = function ($link, $id_lot, $id_user) {
  * @param $link
  * @return array|null
  */
-$get_id_lot = function ($link,$user_id) {
+function get_id_lot($link,$user_id) {
     $sql = "SELECT MAX(id) AS id FROM lot WHERE  users_id = '$user_id'";
     $result = mysqli_query($link, $sql);
     return mysqli_fetch_array($result, MYSQLI_ASSOC);
@@ -366,7 +357,7 @@ $get_id_lot = function ($link,$user_id) {
  * @param $link
  * @return array|null
  */
-$get_check_rate = function ($link, $lot_id, $user_id) {
+function get_check_rate($link, $lot_id, $user_id) {
     $sql = "SELECT users_id, lot_id FROM rate AS r WHERE r.lot_id = '$lot_id' AND r.users_id = '$user_id'";
     $result = mysqli_query($link, $sql);
     return mysqli_fetch_array($result, MYSQLI_ASSOC);
@@ -377,21 +368,7 @@ $get_check_rate = function ($link, $lot_id, $user_id) {
  * @param $link
  * @return array|null
  */
-$get_users_lot = function ($link, $user_id) {
-    $sql = "SELECT lot_id FROM users WHERE id = '$user_id'";
-    $result = mysqli_query($link, $sql);
-    if (!$result) {
-        print("Ошибочка " . mysqli_connect_error());
-    }
-    return mysqli_fetch_array($result, MYSQLI_ASSOC);
-};
-
-/**
- * Функция возвращает данные из БД
- * @param $link
- * @return array|null
- */
-$get_userid_from_lot = function ($link, $user_id ) {
+function get_userid_from_lot($link, $user_id ) {
     $sql = "SELECT id FROM rate WHERE  users_id = '$user_id'";
     $result = mysqli_query($link, $sql);
     return mysqli_fetch_array($result, MYSQLI_ASSOC);
@@ -402,7 +379,7 @@ $get_userid_from_lot = function ($link, $user_id ) {
  * @param $link
  * @return array|null
  */
-$is_check_rate = function ($link,$lot_id,$user_id) {
+function is_check_rate($link,$lot_id,$user_id) {
     $sql = "SELECT lot_id, users_id FROM rate WHERE lot_id ='$lot_id' AND users_id='$user_id'";
     $result = mysqli_query($link, $sql);
     if (!$result) {

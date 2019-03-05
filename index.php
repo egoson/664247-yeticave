@@ -9,8 +9,8 @@ if (!$link) {
     print("Ошибка: невозможно подключиться к MySQL " . mysqli_connect_error());
     die();
 }
-$categories =  $get_categories($link);
-$lot = $get_lots($link);
+$categories = get_categories($link);
+$lot = get_lots($link);
 
 $title_name = "Главная";
 $user_name = "";
