@@ -22,7 +22,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $errors[$field] = "Не заполнено поле " . $field;
         }
     }
-
     if (!filter_var($form["email"], FILTER_VALIDATE_EMAIL)) {
         $errors['email'] = "Неверно введен email адрес";
     }

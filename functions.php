@@ -73,14 +73,19 @@ function min_rate($price,$step_price) {
  * Функция считает сколько осталось времени до полуночи
  * @return string
  */
-function do_time_to_cell()
+function do_time_to_cell($dt_close)
 {
-    $ts = time();
-    $ts_midnight = strtotime('tomorrow');
-    $time_to_midnight = $ts_midnight - $ts;
-    $hours = floor($time_to_midnight / 3600);
-    $minutes = floor(($time_to_midnight % 3600) / 60);
-    return $hours . ":" . sprintf('%02d', $minutes);
+    $difference_time = strtotime($dt_close) - time()  + 3600;
+    if ($difference_time < 60) {
+        $time_rate = "только что";
+    }  elseif ($difference_time >= 60 && $difference_time < 3600) {
+        $time_rate = round($difference_time / 60) . " минут";
+    } elseif ($difference_time >= 3600 && $difference_time < 86400) {
+        $time_rate = round($difference_time / 3600) . " часов";
+    } elseif ($difference_time > 86400) {
+        $time_rate = round($difference_time / 86400) . " дней";
+    }
+    return $time_rate;
 };
 
 
@@ -122,11 +127,13 @@ function get_categories($link) {
  */
 function get_lots($link) {
 
-    $sql = "SELECT l.id as lot_id, image, l.name, start_price, c.name AS categories_name, MAX(r.amount) AS r_amount FROM lot AS l
+    $sql = "SELECT l.id as lot_id, image, l.name, start_price, dt_close, c.name AS categories_name, MAX(r.amount) AS r_amount FROM lot AS l
     JOIN categories AS c ON l.categories_id = c.id
     LEFT JOIN rate AS r ON r.lot_id = l.id
     WHERE dt_close > NOW()
-    GROUP BY l.id";
+    
+    GROUP BY l.id
+    ORDER BY dt_close DESC ";
     $result = mysqli_query($link, $sql);
 
     if (!$result) {

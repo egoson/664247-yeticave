@@ -24,11 +24,11 @@
                     <h3 class="lot__title"><a class="text-link" href="lot.php?lot_id=<?=$item["lot_id"];?>"><?=htmlspecialchars($item["name"]);?></a></h3>
                     <div class="lot__state">
                         <div class="lot__rate">
-                            <span class="lot__amount"><?=htmlspecialchars($item["start_price"]);?></span>
-                            <span class="lot__cost"><?=(do_price(htmlspecialchars($item["r_amount"]))); ?></span>
+                            <span class="lot__amount">Стартовая цена</span>
+                            <span class="lot__cost"><?=htmlspecialchars($item["start_price"]);?></span>
                         </div>
                         <div class="lot__timer timer">
-                            <?=do_time_to_cell();?>
+                            <?=do_time_to_cell($item["dt_close"]);?>
                         </div>
                     </div>
                 </div>
