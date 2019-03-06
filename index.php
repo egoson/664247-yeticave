@@ -1,6 +1,7 @@
 <?php
 require_once ("functions.php");
 require_once ("init.php");
+require_once ("win.php");
 session_start();
 
 date_default_timezone_set("Europe/Moscow");

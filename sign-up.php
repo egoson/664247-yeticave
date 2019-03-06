@@ -1,6 +1,7 @@
 <?php
 require_once ("functions.php");
 require_once ("init.php");
+
 session_start();
 error_reporting(E_ALL);
 if (!$link) {
@@ -10,6 +11,8 @@ if (!$link) {
 $tpl_data = [];
 $errors = null;
 $form = "";
+$user_name = "";
+$is_auth= "";
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $form = $_POST;
     $errors = [];
@@ -19,6 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $errors[$field] = "Не заполнено поле " . $field;
         }
     }
+
     if (!filter_var($form["email"], FILTER_VALIDATE_EMAIL)) {
         $errors['email'] = "Неверно введен email адрес";
     }
@@ -29,12 +33,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $errors['email'] = 'Пользователь с этим email уже зарегистрирован';
         } else {
             $password = password_hash($form['password'], PASSWORD_DEFAULT);
-            function add_user($link, $form, $password)
-            {
-                $sql = 'INSERT INTO users (email, users.password, users.name, contacts) VALUES (?, ?, ?, ?)';
-                $stmt = db_get_prepare_stmt($link, $sql, [$form['email'], $password, $form['name'], $form['contacts']]);
-                return mysqli_stmt_execute($stmt);
-            }
             $new_user = add_user($link, $form, $password);
             if($new_user && empty($errors)) {
                 header("Location: /login.php");

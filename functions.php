@@ -387,3 +387,31 @@ function is_check_rate($link,$lot_id,$user_id) {
     }
     return mysqli_fetch_all($result, MYSQLI_ASSOC);
 };
+
+/**
+ * Функия получает пользователя по переданному email
+ * @param $link
+ * @param $email
+ * @return array|null
+ */
+function get_user($link, $email)
+{
+    $sql = "SELECT * FROM users WHERE email = '$email'";
+    $result = mysqli_query($link, $sql);
+    $user = $result ? mysqli_fetch_array($result, MYSQLI_ASSOC) : null;
+    return $user;
+}
+
+/**
+ * Функия добавляет пользователя в БД
+ * @param $link
+ * @param $form
+ * @param $password
+ * @return bool
+ */
+function add_user($link, $form, $password)
+{
+    $sql = 'INSERT INTO users (email, users.password, users.name, contacts) VALUES (?, ?, ?, ?)';
+    $stmt = db_get_prepare_stmt($link, $sql, [$form['email'], $password, $form['name'], $form['contacts']]);
+    return mysqli_stmt_execute($stmt);
+}

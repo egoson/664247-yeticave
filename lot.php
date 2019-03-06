@@ -1,6 +1,7 @@
 <?php
 require_once ("functions.php");
 require_once ("init.php");
+
 session_start();
 if (!$link) {
     print("Ошибка: невозможно подключиться к MySQL " . mysqli_connect_error());
@@ -9,6 +10,8 @@ if (!$link) {
 $error = "";
 $user_id = "";
 $is_error = true;
+$is_auth = "";
+
 $categories = get_categories($link);
 if ($_GET["lot_id"] && !ctype_alpha($_GET["lot_id"])) {
     $lot_id = $_GET["lot_id"];
@@ -19,7 +22,7 @@ if ($_GET["lot_id"] && !ctype_alpha($_GET["lot_id"])) {
     $raties = get_raties($link, $lot["lot_id"]);
     $max_rate = get_max_rate($link, $lot["lot_id"]);
     $_SESSION["user"]["cur_lot_id"] = $lot["lot_id"];
-    $is_users_lot = $lot["users_id"] === $_SESSION["user"]["id"] ? true : false ;
+    $is_users_lot = $lot["users_id"] === $user_id ? true : false ;
     $checked_rate = is_check_rate($link,$lot_id,$user_id);
     $min_rate = !$lot["r_amount"] ? $lot["start_price"] + $lot["step_price"] : $lot["step_price"] + $max_rate["max_amount"];
     $_SESSION["user"]["min_rate"] = $min_rate;
