@@ -60,16 +60,6 @@ function do_time_rate($raties) {
 };
 
 /**
- * Функция возвращает сумму двух переменных
- * @param integer $price
- * @param integer $step_price
- * @return mixed
- */
-function min_rate($price,$step_price) {
-    return $price + $step_price;
-};
-
-/**
  * Функция считает сколько осталось времени до полуночи
  * @return string
  */
@@ -88,7 +78,6 @@ function do_time_to_cell($dt_close)
     }
     return $time_rate;
 };
-
 
 /**
  * Функция изменяет формат даты
@@ -200,32 +189,6 @@ function get_max_rate($link, $lot_id) {
     return mysqli_fetch_array($result, MYSQLI_ASSOC);
 };
 
-function get_user_id_amount($link, $amount) {
-    $sql = "SELECT r.users_id, r.amount, r.lot_id FROM rate AS r
-  
-    WHERE r.amount = '$amount'";
-    $result = mysqli_query($link, $sql);
-
-    if (!$result) {
-        print("Ошибочка " . mysqli_connect_error());
-    }
-    return mysqli_fetch_array($result, MYSQLI_ASSOC);
-}
-
-function get_max_rate_userid($link, $lot_id) {
-    $sql = "SELECT MAX(r.amount) AS max_amount, users_id FROM rate AS r
-  
-    JOIN lot AS l ON l.id = r.lot_id
-    WHERE l.id = $lot_id ";
-    $result = mysqli_query($link, $sql);
-
-    if (!$result) {
-        print("Ошибочка " . mysqli_connect_error());
-    }
-    return mysqli_fetch_array($result, MYSQLI_ASSOC);
-};
-
-
 /**
  * Функция возвращает данные из БД
  * @param $link
@@ -259,22 +222,6 @@ function get_category($link, $name_category) {
     }
     return $categories = mysqli_fetch_array($result, MYSQLI_ASSOC);
 };
-
-/**
- * Функция добавляет данные в БД
- * @param $link
- * @return array|null
- */
-function add_photo($link, $photo) {
-    $sql = "INSERT INTO lot (image) VALUES ($photo)";
-    $result = mysqli_query($link, $sql);
-
-    if (!$result) {
-        print("Ошибочка " . mysqli_connect_error());
-    }
-    return mysqli_fetch_array($result, MYSQLI_ASSOC);
-};
-
 
 /**
  * Функция помощник для подготовленных выражений... я потреял описание, возможно написал чушь)
@@ -351,30 +298,6 @@ function add_rate($link, $form) {
     return mysqli_stmt_execute($stmt);
 };
 
-
-
-/**
- * Функция возвращает данные из БД
- * @param $link
- * @return array|null
- */
-function get_id_user($link, $user_id) {
-    $sql = "SELECT id FROM users WHERE email = '$user_id'";
-    $result = mysqli_query($link, $sql);
-    return mysqli_fetch_array($result, MYSQLI_ASSOC);
-};
-
-/**
- * Функция обновляет данные в БД
- * @param $link
- * @return array|null
- */
-function update_lot_to_user($link, $id_lot, $id_user) {
-    $sql = "UPDATE users SET lot_id=(?) WHERE id = (?)";
-    $stmt = db_get_prepare_stmt($link, $sql, [$id_lot, $id_user]);
-    return mysqli_stmt_execute($stmt);
-};
-
 /**
  * Функция возвращает данные из БД
  * @param $link
@@ -382,28 +305,6 @@ function update_lot_to_user($link, $id_lot, $id_user) {
  */
 function get_id_lot($link,$user_id) {
     $sql = "SELECT MAX(id) AS id FROM lot WHERE  users_id = '$user_id'";
-    $result = mysqli_query($link, $sql);
-    return mysqli_fetch_array($result, MYSQLI_ASSOC);
-};
-
-/**
- * Функция возвращает данные из БД
- * @param $link
- * @return array|null
- */
-function get_check_rate($link, $lot_id, $user_id) {
-    $sql = "SELECT users_id, lot_id FROM rate AS r WHERE r.lot_id = '$lot_id' AND r.users_id = '$user_id'";
-    $result = mysqli_query($link, $sql);
-    return mysqli_fetch_array($result, MYSQLI_ASSOC);
-};
-
-/**
- * Функция возвращает данные из БД
- * @param $link
- * @return array|null
- */
-function get_userid_from_lot($link, $user_id ) {
-    $sql = "SELECT id FROM rate WHERE  users_id = '$user_id'";
     $result = mysqli_query($link, $sql);
     return mysqli_fetch_array($result, MYSQLI_ASSOC);
 };
@@ -448,4 +349,23 @@ function add_user($link, $form, $password)
     $sql = 'INSERT INTO users (email, users.password, users.name, contacts) VALUES (?, ?, ?, ?)';
     $stmt = db_get_prepare_stmt($link, $sql, [$form['email'], $password, $form['name'], $form['contacts']]);
     return mysqli_stmt_execute($stmt);
+}
+
+/**
+ * Выполняет поиск по таблицам по ключевым словам
+ * @param $link
+ * @param $search
+ * @return array|null
+ */
+function get_search_lot($link,$search)
+{
+    $sql = "SELECT l.id as lot_id, image, l.name, start_price, dt_close, c.name AS categories_name, MAX(r.amount) AS r_amount FROM lot AS l
+          JOIN categories AS c ON l.categories_id = c.id
+          LEFT JOIN rate AS r ON r.lot_id = l.id
+          WHERE MATCH(l.name,l.description) AGAINST(?)
+          GROUP BY l.id";
+    $stmt = db_get_prepare_stmt($link, $sql, [$search]);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+    return mysqli_fetch_all($result, MYSQLI_ASSOC);
 }
