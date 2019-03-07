@@ -15,7 +15,7 @@
         <div class="form__item <?=$classname;?>"> <!-- form__item--invalid -->
             <label for="email">E-mail*</label>
             <input id="email" type="text" name="email" value="<?=$email ?? ''; ?>" placeholder="Введите e-mail" >
-            <span class="form__error"><?=$errors["email"] ?? "Введите email";var_dump($errors["email"]) ?></span>
+            <span class="form__error"><?=$errors["email"] ?? "Введите email"; ?></span>
         </div>
         <?php $classname = isset($errors["password"]) ? "form__item--invalid" : "";?>
         <div class="form__item form__item--last <?=$classname;?>">

@@ -7,11 +7,10 @@ if (!$link) {
     die();
 }
 
-$categories =  $get_categories($link);
-
-
+$categories =  get_categories($link);
 $title_name = "404";
-$user_name = $_SESSION['user']['name'];
+$user_name = $_SESSION['user']['name'] ?? "";
+
 date_default_timezone_set("Europe/Moscow");
 setlocale(LC_ALL, 'ru_RU');
 
@@ -23,7 +22,6 @@ $layout_content = include_template("layout.php", [
     'content' => $page_content,
     'user' => $user_name,
     'title' => $title_name,
-    'is_auth' => $is_auth,
     'equipments' => $categories
 ]);
 print ($layout_content);

@@ -3,58 +3,52 @@ require_once ("functions.php");
 require_once ("init.php");
 session_start();
 
-if(!$_SESSION["user"]["id"]) {
-    header("Location: 404.php");
-}
+$user_name = $_SESSION['user']['name'] ?? header("Location: 404.php");
 
-$categories =  $get_categories($link);
+$categories =  get_categories($link);
+$is_auth = "";
+$step_price = "";
+$start_price = "";
+$category = null;
+$file = "";
+$lot_date = "";
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-
     $new_lot = $_POST;
-
     $required = ["lot-name", "description", "start_price", "step_price", "lot-date", "category", "lot-date"];
     $dict = ["lot-name" => "Имя лота", "description" => "Описание", "photo" => "Изображение", "start_price" => "Начальная цена", "step_price" => "Шаг ставки", "lot-date" => "Дата окончания торгов", "category" => "Категория"];
     $errors = [];
-
     foreach ($required as $key) {
         if (empty($_POST[$key])) {
             $errors[$key] = "Это поле надо заполнить";
         }
     }
-
     if (isset($new_lot["step_price"]) && $new_lot["step_price"] > 0 && ctype_digit($new_lot["step_price"])) {
         $step_price = $new_lot["step_price"];
     } else {
         $errors["step_price"] = "введите корректное число";
     }
-
     if (isset($new_lot["start_price"]) && $new_lot["start_price"] > 0 && ctype_digit($new_lot["start_price"])) {
         $start_price = $new_lot["start_price"];
     } else {
         $errors["start_price"] = "введите корректное число";
     }
-
     if (isset($new_lot["description"])) {
         $description = $new_lot["description"];
     }
-
     if (isset($new_lot["lot-name"])) {
         $lot_name = $new_lot["lot-name"];
     }
-
-    if (isset($new_lot["category"]) && $new_lot["category"] == $get_category($link, $new_lot["category"])) {
+    $category = get_category($link, $new_lot["category"]);
+    if (isset($new_lot["category"]) && $new_lot["category"] === $category["name"]) {
         $category = $new_lot["category"];
     } else {
         $errors["categories"] = "Нужно выбрать категорию";
     }
-
-    $new_lot["lot-date"] = date("d.m.Y", strtotime($new_lot["lot-date"]));
-    if (isset($new_lot["lot-date"]) && check_date_format($new_lot["lot-date"]) && strtotime($new_lot["lot-date"]) > strtotime("now")) {
-        $lot_date = date('Y-m-d',strtotime($new_lot["lot-date"]));
-    } else {
+    $checked_date = date("d.m.Y", strtotime($new_lot["lot-date"]));
+    if (empty($new_lot["lot-date"]) || check_date_format($checked_date) && strtotime($new_lot["lot-date"]) < strtotime("now")) {
         $errors["lot-date"] = "Введите корректную дату торгов";
     }
-
+    $lot_date = $new_lot["lot-date"];
     if (!empty($_FILES["photo"]["name"])) {
         $file = $_FILES["photo"];
         $tmp_name = $_FILES['photo']['tmp_name'];
@@ -66,16 +60,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $filename = uniqid() . ".jpg";
             $new_lot["path"] = $filename;
             move_uploaded_file($_FILES["photo"]["tmp_name"], 'img/' . $filename);
-            $id_category = $get_id_category($link, $new_lot["category"]);
+            $id_category = get_id_category($link, $new_lot["category"]);
             $new_lot["path"] = "img/" . $new_lot["path"];
-            $user_id = $_SESSION["user"]["id"];
-
-
+            if (isset($_SESSION["user"]["id"])) {
+                $user_id = $_SESSION["user"]["id"];
+            }
         }
     } else {
         $errors["photo"] = 'Загрузите картинку';
     }
-
     if (count($errors)) {
         $page_content = include_template("add.php", [
             "errors" => $errors,
@@ -90,36 +83,28 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             "photo" => $file
         ]);
     }
-
-
-
     else {
 
-        $add = $add_lot($link, $new_lot, $id_category, $user_id);
-        $lot_id = $get_id_lot($link, $user_id);
+        $add = add_lot($link, $new_lot, $id_category, $user_id);
+        $lot_id = get_id_lot($link, $user_id);
 
         header("Location: lot.php?lot_id=" . $lot_id["id"]);
     }
 }
-
 else {
-    $categories =  $get_categories($link);
+    $categories =  get_categories($link);
     $page_content = include_template('add.php', ["equipments" => $categories]);
 }
-
 if (!$link) {
     print("Ошибка: невозможно подключиться к MySQL " . mysqli_connect_error());
     die();
 };
-
+    $user_name = "";
     $title_name = "Добавить лот";
-    $user_name = $_SESSION['user']['name'];
-    date_default_timezone_set("Europe/Moscow");
-    setlocale(LC_ALL, 'ru_RU');
-
-
+    if (isset($_SESSION['user']['name'])) {
+        $user_name = $_SESSION['user']['name'];
+    };
     $content = include_template('error.php', ['error' => mysqli_error($link)]);
-
     $layout_content = include_template("layout.php", [
         "content" => $page_content,
         "user" => $user_name,

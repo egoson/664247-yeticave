@@ -20,31 +20,34 @@
                 <p class="lot-item__description"><?=$lot["description"];?></p>
             </div>
             <div class="lot-item__right">
-                <?php if ($_SESSION['user']['name'] && !$checked_rate && !$is_users_lot): ?>
+
                 <div class="lot-item__state">
                     <div class="lot-item__timer timer">
-                        10:54
+                        <?=do_time_to_cell($lot["dt_close"])?>
                     </div>
                     <div class="lot-item__cost-state">
                         <div class="lot-item__rate">
                             <span class="lot-item__amount">Текущая цена</span>
-                            <span class="lot-item__cost"><?=(do_price(htmlspecialchars($lot["start_price"]))); ?></span>
+                            <span class="lot-item__cost"><?=do_price($max_rate["max_amount"]);?></span>
                         </div>
                         <div class="lot-item__min-cost">
                             Мин. ставка <span><?=do_price($min_rate); ?></span>
                         </div>
                     </div>
-                    <form class="lot-item__form" action="add-rate.php" method="post">
+                    <?php if (isset($_SESSION['user']['name']) && !$checked_rate && !$is_users_lot): ?>
+                    <form class="lot-item__form" action="add-rate.php" method="get">
                         <?php $classname = isset($error) ? "form__item--invalid" : "";?>
-                        <p class="lot-item__form-item form__item  <?=$classname;?>">
+                        <p class="lot-item__form-item form__item  <?=$classname;?>" >
                             <label for="cost">Ваша ставка</label>
-                            <input id="cost" type="text" name="cost" placeholder="<?=do_price($min_rate); ?>>
+                            <input id="cost" type="text" name="cost" placeholder="<?=do_price($min_rate, false);?>" >
+                            <input type="hidden" id="cost" name="lot_id" value="<?=$lot["lot_id"];?>">
                             <span><?=$error = !empty($error) ? $error : "Введите ставку";?></span>
                         </p>
                         <button type="submit" class="button">Сделать ставку</button>
                     </form>
+                    <?php endif; ?>
                 </div>
-                <?php endif; ?>
+
                 <div class="history">
                     <h3>История ставок (<span><?php print(count($raties))?></span>)</h3>
                     <table class="history__list">

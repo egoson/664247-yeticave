@@ -1,44 +1,39 @@
 <?php
 require_once ("functions.php");
 require_once ("init.php");
+
 session_start();
-
-
+error_reporting(E_ALL);
+if (!$link) {
+    print("Ошибка: невозможно подключиться к MySQL " . mysqli_connect_error());
+    die();
+};
 $tpl_data = [];
-
+$errors = null;
+$form = "";
+$user_name = "";
+$is_auth= "";
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $form = $_POST;
     $errors = [];
-
     $req_fields = ["email", "password", "name", "contacts"];
-
     foreach ($req_fields as $field) {
         if (empty($form[$field])) {
             $errors[$field] = "Не заполнено поле " . $field;
         }
     }
-
     if (!filter_var($form["email"], FILTER_VALIDATE_EMAIL)) {
         $errors['email'] = "Неверно введен email адрес";
     }
-
-
     if (empty($errors)) {
         $email = mysqli_real_escape_string($link, $form['email']);
-        $is_set = $get_email($link,$email);
+        $is_set = get_email($link,$email);
         if ($is_set) {
             $errors['email'] = 'Пользователь с этим email уже зарегистрирован';
         } else {
             $password = password_hash($form['password'], PASSWORD_DEFAULT);
-
-
-
-                $sql = 'INSERT INTO users (email, users.password, users.name, contacts) VALUES (?, ?, ?, ?)';
-                $stmt = db_get_prepare_stmt($link, $sql, [$form['email'], $password, $form['name'], $form['contacts']]);
-                $res = mysqli_stmt_execute($stmt);
-
-
-            if($res && empty($errors)) {
+            $new_user = add_user($link, $form, $password);
+            if($new_user && empty($errors)) {
                 header("Location: /login.php");
                 exit();
             }
@@ -46,27 +41,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $tpl_data['errors'] = $errors;
         $tpl_data['values'] = $form;
     }
-
 }
 
-
-if (!$link) {
-    print("Ошибка: невозможно подключиться к MySQL " . mysqli_connect_error());
-    die();
-}
-
-
-
-
-$categories =  $get_categories($link);
-
-$is_auth = rand(0, 1);
+$categories =  get_categories($link);
 $title_name = "Регистрация";
-$user_name = 'Денис Филипкин';
-date_default_timezone_set("Europe/Moscow");
-setlocale(LC_ALL, 'ru_RU');
-
-
 $page_content = include_template("sign-up.php", [
     'equipments' => $categories,
     "errors" => $errors,

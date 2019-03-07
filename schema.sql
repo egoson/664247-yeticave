@@ -9,9 +9,7 @@ CREATE TABLE users (
 	dt_add TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	name CHAR(50) NOT NULL,
 	contacts CHAR(11) NOT NULL,
-	avatar TINYTEXT,
-	lot_id INT(20),
-	rate_id INT(20)
+	avatar TINYTEXT
 );
 
 CREATE TABLE categories (

@@ -1,44 +1,36 @@
 INSERT INTO categories (name) VALUES ("Доски и лыжи"), ("Крепления"), ("Ботинки"), ("Одежда"), ("Инструменты"), ("Разное"); -- добавляет категории в таблицу категорий
 
-INSERT INTO users (email,users.password, name, contacts, avatar, lot_id, rate_id) VALUES -- добавляет пользователей в таблицу пользователей
+INSERT INTO users (email,users.password, name, contacts, avatar) VALUES -- добавляет пользователей в таблицу пользователей
   (
     "egoson@mail.ru",
     "sda112",
     "Den",
     "89041989999",
-    "hhjsj.ss",
-    "1",
-    "1"
+    "hhjsj.ss"
   ),
   (
     "myson@mail.ru",
     "sda112",
     "Daha",
     "89021989999",
-    "hhjsj.sss",
-    "2",
-    "2"
+    "hhjsj.sss"
   ),
   (
     "oson@mail.ru",
     "sda112",
     "Vanyz",
     "890419999",
-    "hhjssj.ss",
-    "3",
-    "3"
+    "hhjssj.ss"
   ),
   (
     "on@mail.ru",
     "sda112",
     "Datt",
     "89021289999",
-    "hhj11sj.sss",
-    "4",
-    "3"
+    "hhj11sj.sss"
   );
 
-INSERT INTO lot (name, description, image, start_price, step_price, users_id, win_id, categories_id) VALUES -- добавляет лот в таблицу лотов
+INSERT INTO lot (name, description, image, start_price, dt_close, step_price, users_id, win_id, categories_id) VALUES -- добавляет лот в таблицу лотов
   (
     "2014 Rossignol District Snowboard",
     "Легкий маневренный сноуборд, готовый дать жару в любом парке,
@@ -48,6 +40,7 @@ INSERT INTO lot (name, description, image, start_price, step_price, users_id, wi
     на Вашу доску и улыбнитесь, крутая графика от Шона Кливера еще никого не оставляла равнодушным.",
     "img/lot-1.jpg",
     "10999",
+    "2019-03-22 12:40:00",
     "1001",
     "1",
     NULL,
@@ -57,7 +50,8 @@ INSERT INTO lot (name, description, image, start_price, step_price, users_id, wi
     "DC Ply Mens 2016/2017 Snowboard",
     "Тоже самое тут в описании",
     "img/lot-2.jpg",
-    "159999",
+    "9800",
+    "2019-03-20 12:40:00",
     "1001",
     "2",
     NULL,
@@ -68,6 +62,7 @@ INSERT INTO lot (name, description, image, start_price, step_price, users_id, wi
     "Тоже самое тут в описании",
     "img/lot-3.jpg",
     "8000",
+    "2019-05-22 12:40:00",
     "1001",
     "3",
     "1",
@@ -78,6 +73,7 @@ INSERT INTO lot (name, description, image, start_price, step_price, users_id, wi
     "Тоже самое тут в описании",
     "img/lot-4.jpg",
     "10999",
+    "2019-03-21 12:40:00",
     "1001",
     "4",
     "2",
@@ -88,6 +84,7 @@ INSERT INTO lot (name, description, image, start_price, step_price, users_id, wi
     "Тоже самое тут в описании",
     "img/lot-5.jpg",
     "7500",
+    "2019-03-22 12:40:00",
     "1001",
     "4",
     "3",
@@ -98,6 +95,7 @@ INSERT INTO lot (name, description, image, start_price, step_price, users_id, wi
     "Тоже самое тут в описании",
     "img/lot-6.jpg",
     "5400",
+    "2019-02-22 12:40:00",
     "1001",
     "1",
     "2",
@@ -121,12 +119,12 @@ INSERT INTO rate (amount, users_id, lot_id) VALUES -- добавляет ста�
     "3"
   ),
   (
-    "40000",
+    "18000",
     "3",
     "3"
   ),
   (
-    "40000",
+    "17000",
     "3",
     "2"
   ),
