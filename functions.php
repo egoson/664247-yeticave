@@ -81,7 +81,8 @@ function do_time_to_cell($dt_close)
     }  elseif ($difference_time >= 60 && $difference_time < 3600) {
         $time_rate = round($difference_time / 60) . " минут";
     } elseif ($difference_time >= 3600 && $difference_time < 86400) {
-        $time_rate = round($difference_time / 3600) . " часов";
+        $time_rate = round($difference_time / 3600) . " часов" . " : " . round(($difference_time % 3600 ) / 60) . " минут";
+
     } elseif ($difference_time > 86400) {
         $time_rate = round($difference_time / 86400) . " дней";
     }
@@ -127,13 +128,13 @@ function get_categories($link) {
  */
 function get_lots($link) {
 
-    $sql = "SELECT l.id as lot_id, image, l.name, start_price, dt_close, c.name AS categories_name, MAX(r.amount) AS r_amount FROM lot AS l
+    $sql = "SELECT l.id as lot_id, image, l.name, start_price, l.dt_add, dt_close, c.name AS categories_name, MAX(r.amount) AS r_amount FROM lot AS l
     JOIN categories AS c ON l.categories_id = c.id
     LEFT JOIN rate AS r ON r.lot_id = l.id
     WHERE dt_close > NOW()
     
     GROUP BY l.id
-    ORDER BY dt_close DESC ";
+    ORDER BY dt_add DESC ";
     $result = mysqli_query($link, $sql);
 
     if (!$result) {
@@ -198,6 +199,32 @@ function get_max_rate($link, $lot_id) {
     }
     return mysqli_fetch_array($result, MYSQLI_ASSOC);
 };
+
+function get_user_id_amount($link, $amount) {
+    $sql = "SELECT r.users_id, r.amount, r.lot_id FROM rate AS r
+  
+    WHERE r.amount = '$amount'";
+    $result = mysqli_query($link, $sql);
+
+    if (!$result) {
+        print("Ошибочка " . mysqli_connect_error());
+    }
+    return mysqli_fetch_array($result, MYSQLI_ASSOC);
+}
+
+function get_max_rate_userid($link, $lot_id) {
+    $sql = "SELECT MAX(r.amount) AS max_amount, users_id FROM rate AS r
+  
+    JOIN lot AS l ON l.id = r.lot_id
+    WHERE l.id = $lot_id ";
+    $result = mysqli_query($link, $sql);
+
+    if (!$result) {
+        print("Ошибочка " . mysqli_connect_error());
+    }
+    return mysqli_fetch_array($result, MYSQLI_ASSOC);
+};
+
 
 /**
  * Функция возвращает данные из БД
@@ -320,7 +347,7 @@ function add_lot($link, $new_lot, $id_category, $user_id) {
  */
 function add_rate($link, $form) {
     $sql = "INSERT INTO rate (amount, users_id, lot_id) VALUES (?,?,?)";
-    $stmt = db_get_prepare_stmt($link, $sql, [$form["cost"], $_SESSION["user"]["id"], $_SESSION["user"]["cur_lot_id"]]);
+    $stmt = db_get_prepare_stmt($link, $sql, [$form["cost"], $_SESSION["user"]["id"], $form["lot_id"]]);
     return mysqli_stmt_execute($stmt);
 };
 

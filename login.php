@@ -2,9 +2,10 @@
 require_once ("functions.php");
 require_once ("init.php");
 session_start();
-if(isset($_SESSION["user"]["url"])) {
-    $link_to_cur_page = $_SESSION["user"]["url"];
-};
+if (!$link) {
+    print("Ошибка: невозможно подключиться к MySQL " . mysqli_connect_error());
+    die();
+}
 $lot = get_lots($link);
 $categories =  get_categories($link);
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -44,21 +45,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             'equipments' => $categories
     ]);
 }
-if (!$link) {
-    print("Ошибка: невозможно подключиться к MySQL " . mysqli_connect_error());
-    die();
-}
 $title_name = "Вход";
-$user_name = "";
-if (isset($_SESSION['user']['name'])) {
-    $user_name = $_SESSION['user']['name'];
-}
-$_SESSION['user']['name'] = NULL;
+$user_name = $_SESSION['user']['name'] ?? "";
 $layout_content = include_template("layout.php", [
     'content' => $page_content,
     'user' => $user_name,
     'title' => $title_name,
-    'equipments' => $categories,
-    'username' => $_SESSION['user']['name']
+    'equipments' => $categories
 ]);
 print ($layout_content);

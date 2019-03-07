@@ -8,12 +8,8 @@ if (!$link) {
 }
 
 $categories =  get_categories($link);
-
-$user_name = "";
 $title_name = "404";
-if (isset($_SESSION['user']['name'])) {
-    $user_name = $_SESSION['user']['name'];
-}
+$user_name = $_SESSION['user']['name'] ?? "";
 
 date_default_timezone_set("Europe/Moscow");
 setlocale(LC_ALL, 'ru_RU');

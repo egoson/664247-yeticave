@@ -3,9 +3,7 @@ require_once ("functions.php");
 require_once ("init.php");
 session_start();
 
-if(!isset($_SESSION["user"]["name"])) {
-    header("Location: 404.php");
-}
+$user_name = $_SESSION['user']['name'] ?? header("Location: 404.php");
 
 $categories =  get_categories($link);
 $is_auth = "";
