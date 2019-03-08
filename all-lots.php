@@ -19,7 +19,6 @@ $lot = get_lots($link);
 $title_name = "Главная";
 $user_name = $_SESSION['user']['name'] ?? "";
 
-
 $page_content = include_template("all-lots.php", [
     'lots' => $lots
 ]);

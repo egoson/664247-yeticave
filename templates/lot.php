@@ -28,7 +28,7 @@
                     <div class="lot-item__cost-state">
                         <div class="lot-item__rate">
                             <span class="lot-item__amount">Текущая цена</span>
-                            <span class="lot-item__cost"><?=do_price($max_rate["max_amount"]);?></span>
+                            <span class="lot-item__cost"><?=$max_rate["max_amount"] = empty($max_rate["max_amount"]) ? do_price($lot["start_price"]) : do_price($max_rate["max_amount"]) ?></span>
                         </div>
                         <div class="lot-item__min-cost">
                             Мин. ставка <span><?=do_price($min_rate); ?></span>
