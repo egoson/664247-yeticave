@@ -19,7 +19,7 @@ function include_template($name, $data) {
 };
 
 /**
- * Функция для форматирования цены.
+ * Функция для форматирования цены
  *
  * Ставит пробел после каждого третьего знака.
  *
@@ -448,4 +448,23 @@ function add_user($link, $form, $password)
     $sql = 'INSERT INTO users (email, users.password, users.name, contacts) VALUES (?, ?, ?, ?)';
     $stmt = db_get_prepare_stmt($link, $sql, [$form['email'], $password, $form['name'], $form['contacts']]);
     return mysqli_stmt_execute($stmt);
+}
+
+/**
+ * Функция делает поиск по БД
+ * @param $link
+ * @param $search
+ * @return array|null
+ */
+function get_search_lot($link,$search)
+{
+    $sql = "SELECT l.id as lot_id, image, l.name, start_price, dt_close, c.name AS categories_name, MAX(r.amount) AS r_amount FROM lot AS l
+          JOIN categories AS c ON l.categories_id = c.id
+          LEFT JOIN rate AS r ON r.lot_id = l.id
+          WHERE MATCH(l.name,l.description) AGAINST(?)
+          GROUP BY l.id";
+    $stmt = db_get_prepare_stmt($link, $sql, [$search]);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+    return mysqli_fetch_all($result, MYSQLI_ASSOC);
 }

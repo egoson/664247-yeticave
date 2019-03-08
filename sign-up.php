@@ -30,13 +30,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $is_set = get_email($link,$email);
         if ($is_set) {
             $errors['email'] = 'Пользователь с этим email уже зарегистрирован';
-        } else {
-            $password = password_hash($form['password'], PASSWORD_DEFAULT);
-            $new_user = add_user($link, $form, $password);
-            if($new_user && empty($errors)) {
-                header("Location: /login.php");
-                exit();
-            }
+        }
+        $password = password_hash($form['password'], PASSWORD_DEFAULT);
+        $new_user = add_user($link, $form, $password);
+        if($new_user && empty($errors)) {
+            header("Location: /login.php");
+            exit();
         }
         $tpl_data['errors'] = $errors;
         $tpl_data['values'] = $form;
