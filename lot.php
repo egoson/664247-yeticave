@@ -7,11 +7,10 @@ if (!$link) {
     print("Ошибка: невозможно подключиться к MySQL " . mysqli_connect_error());
     die();
 };
-
 $error = null;
 $is_error = true;
 $categories = get_categories($link);
-if (isset($_GET["lot_id"]) && !ctype_alpha($_GET["lot_id"])) {
+if (!empty($_GET["lot_id"]) && !ctype_alpha($_GET["lot_id"])) {
     $lot_id = $_GET["lot_id"];
     $user_id = $_SESSION['user']['id'] ?? "";
     $lot = get_lot($link, $_GET["lot_id"]);
@@ -38,6 +37,7 @@ if (isset($_GET["lot_id"]) && !ctype_alpha($_GET["lot_id"])) {
     }
 }
 if ($is_error) {
+    http_response_code(404);
     $page_content = include_template('404.php', [
         "equipments" => $categories]);
 };

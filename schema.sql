@@ -4,37 +4,39 @@ DEFAULT COLLATE utf8_general_ci;
 USE yeticave;
 CREATE TABLE users (
 	id INT AUTO_INCREMENT PRIMARY KEY,
-	email CHAR(128) NOT NULL UNIQUE,
-	password CHAR(60) NOT NULL,
+	email VARCHAR(128) NOT NULL UNIQUE,
+	password VARCHAR(60) NOT NULL,
 	dt_add TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-	name CHAR(50) NOT NULL,
-	contacts CHAR(11) NOT NULL,
+	name VARCHAR(50) NOT NULL,
+	contacts VARCHAR(350) NOT NULL,
 	avatar TINYTEXT
 );
 
 CREATE TABLE categories (
   id INT AUTO_INCREMENT PRIMARY KEY,
-	name CHAR(128)
+	name VARCHAR(128),
+	class VARCHAR(128)
 );
 
 CREATE TABLE lot (
   id INT AUTO_INCREMENT PRIMARY KEY,
 	dt_add TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-	name CHAR(128),
+	name VARCHAR(128),
 	description TEXT,
+	FULLTEXT KEY `ft1`(`name`,`description`),
 	image TINYTEXT,
-	start_price INT(20),
+	start_price INT,
 	dt_close TIMESTAMP,
-	step_price INT(20),
-	users_id INT(20),
-	win_id INT(20),
-	categories_id INT(20)
+	step_price INT,
+	users_id INT,
+	win_id INT,
+	categories_id INT
 );
 
 CREATE TABLE rate (
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	dt_add TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-	amount INT(20),
-	users_id INT(20),
-	lot_id INT(20)
+	amount INT,
+	users_id INT,
+	lot_id INT
 );

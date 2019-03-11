@@ -1,6 +1,7 @@
 <?php
 require_once ("functions.php");
 require_once ("init.php");
+session_start();
 if (!$link) {
     print("Ошибка: невозможно подключиться к MySQL " . mysqli_connect_error());
     die();
@@ -9,9 +10,11 @@ $lots = [];
 $categories = "";
 $user_name = $_SESSION['user']['name'] ?? "";
 $title_name = "Поиск";
-$search = $_GET["search"] ?? "";
+$search = $_GET["search"] ?? null;
+
 $categories = get_categories($link);
-if ($search) {
+if (isset($search)) {
+    $search = trim($search);
     $search_lot = get_search_lot($link,$search);
 }
 $page_content = include_template("index.php", [

@@ -35,6 +35,7 @@
             <textarea id="message" name="contacts" placeholder="Напишите как с вами связаться" ><?=$values['contacts'] ?? ''; ?></textarea>
             <span class="form__error">Напишите как с вами связаться</span>
         </div>
+        <?php $classname = isset($errors['photo']) ? "form__item--invalid" : "";?>
         <div class="form__item form__item--file form__item--last">
             <label>Аватар</label>
             <div class="preview">
@@ -44,7 +45,7 @@
                 </div>
             </div>
             <div class="form__input-file">
-                <input class="visually-hidden" type="file" id="photo2" value="">
+                <input class="visually-hidden" type="file" name="photo" id="photo2" value="">
                 <label for="photo2">
                     <span>+ Добавить</span>
                 </label>

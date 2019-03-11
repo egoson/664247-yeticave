@@ -19,7 +19,7 @@
         <div class="form__item <?=$classname?>"> <!-- form__item--invalid -->
           <label for="lot-name">Наименование</label>
           <input id="lot-name" type="text" name="lot-name" placeholder="Введите название лота" value="<?=$lot_name_cur = isset($lot_name_cur) ? $lot_name_cur : "";?>" >
-          <span class="form__error">Введите наименование лота</span>
+          <span class="form__error"><?=isset($errors["lot-name"]) ? $errors["lot-name"] : "Введите наименование лота";?></span>
         </div>
           <?php
           $classname = isset($errors["categories"]) ? "form__item--invalid" : "";

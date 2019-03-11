@@ -6,10 +6,15 @@ if (!$link) {
     print("Ошибка: невозможно подключиться к MySQL " . mysqli_connect_error());
     die();
 }
+if(!empty($_SESSION["user"]["name"])) {
+    header("Location: 404.php");
+    exit();
+}
 $lot = get_lots($link);
 $categories =  get_categories($link);
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $form = $_POST;
+    array_walk($form, 'trim_value');
     $required = ['email', 'password'];
     $errors = [];
     foreach ($required as $field) {

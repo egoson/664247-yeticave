@@ -7,17 +7,24 @@ if (!$link) {
     die();
 }
 
-if (!ctype_alpha(isset($_GET["category_id"]))) {
+if (!ctype_alpha(isset($_GET["category_id"])) && !ctype_alpha(isset($_GET["cur_page"]))) {
     $category = $_GET["category_id"];
-};
-$lots = get_lots_by_categories($link, $category);
-if(empty($lots)) {
+    $categories = get_categories($link);
+    $lots = get_lots_by_categories($link, $category);
+    $title_name = "Главная";
+    $user_name = $_SESSION['user']['name'] ?? "";
+} else {
+    http_response_code(404);
     header("Location: 404.php");
 }
-$categories = get_categories($link);
-$lot = get_lots($link);
-$title_name = "Главная";
-$user_name = $_SESSION['user']['name'] ?? "";
+
+
+
+
+if(empty($lots)) {
+    http_response_code(404);
+    header("Location: 404.php");
+}
 
 $page_content = include_template("all-lots.php", [
     'lots' => $lots

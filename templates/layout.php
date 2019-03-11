@@ -23,7 +23,7 @@
             <nav class="user-menu">
                 <?php if (isset($_SESSION["user"]["name"])): ?>
                     <div class="user-menu__logged">
-                        <p><?=$user?></p>
+                        <p><?=htmlspecialchars($user)?></p>
                         <a href="logout.php">Выйти</a>
                     </div>
                 <?php else: ?>
@@ -95,6 +95,5 @@
         </div>
     </div>
 </footer>
-
 </body>
 </html>

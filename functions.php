@@ -101,7 +101,7 @@ function check_date_format($date) {
  */
 function get_categories($link) {
 
-    $sql = "SELECT name, id FROM categories";
+    $sql = "SELECT name, id, class FROM categories";
     $result = mysqli_query($link, $sql);
 
     if (!$result) {
@@ -347,8 +347,8 @@ function get_user($link, $email)
  */
 function add_user($link, $form, $password)
 {
-    $sql = 'INSERT INTO users (email, users.password, users.name, contacts) VALUES (?, ?, ?, ?)';
-    $stmt = db_get_prepare_stmt($link, $sql, [$form['email'], $password, $form['name'], $form['contacts']]);
+    $sql = 'INSERT INTO users (email, users.password, users.name, contacts, avatar) VALUES (?, ?, ?, ?, ?)';
+    $stmt = db_get_prepare_stmt($link, $sql, [$form['email'], $password, $form['name'], $form['contacts'], $form["path"]]);
     return mysqli_stmt_execute($stmt);
 }
 
@@ -371,7 +371,6 @@ function get_search_lot($link,$search)
     return mysqli_fetch_all($result, MYSQLI_ASSOC);
 }
 
-
 /**
  * Возвращает лоты по категориям
  * @param $link
@@ -381,10 +380,19 @@ function get_search_lot($link,$search)
 function get_lots_by_categories($link, $category) {
     $sql= "SELECT l.id, l.dt_add, l.name, l.image, l.start_price, l.dt_close, l.win_id, l.categories_id, c.name AS category_name FROM lot AS l
       JOIN categories AS c ON l.categories_id = c.id
-      WHERE c.id = $category";
+      WHERE c.id = $category AND dt_close > NOW()";
     $result = mysqli_query($link, $sql);
     if (!$result) {
         print("Ошибочка " . mysqli_connect_error());
     }
     return mysqli_fetch_all($result, MYSQLI_ASSOC);
 }
+
+/**
+ * Функция удаляет символы и пробелы в начале и в конце строки
+ * @param $value
+ */
+function trim_value(&$value)
+{
+    $value = trim($value);
+};

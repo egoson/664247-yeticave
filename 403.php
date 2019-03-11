@@ -7,10 +7,9 @@ if (!$link) {
     die();
 }
 $categories =  get_categories($link);
-$title_name = "404";
+$title_name = "403";
 $user_name = $_SESSION['user']['name'] ?? "";
-
-$page_content = include_template("404.php", [
+$page_content = include_template("403.php", [
     'equipments' => $categories
 ]);
 $layout_content = include_template("layout.php", [
