@@ -18,7 +18,6 @@ $lot_date = "";
 $lot_name = "";
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $new_lot = $_POST;
-    var_dump($new_lot);
     array_walk($new_lot, 'trim_value');
     $required = ["lot-name", "description", "start_price", "step_price", "lot-date", "category", "lot-date"];
     $dict = ["lot-name" => "Имя лота", "description" => "Описание", "photo" => "Изображение", "start_price" => "Начальная цена", "step_price" => "Шаг ставки", "lot-date" => "Дата окончания торгов", "category" => "Категория"];
