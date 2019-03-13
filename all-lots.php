@@ -7,7 +7,7 @@ if (!$link) {
     die();
 }
 $category_id = $_GET["category_id"] ?? "";
-if (!ctype_alpha($category_id) && !empty($category_id)) {
+if (ctype_digit($category_id) && !empty($category_id)) {
     $categories = get_categories($link);
     $lots = get_lots_by_categories($link, $category_id);
     $title_name = "Главная";
@@ -19,7 +19,7 @@ if (!ctype_alpha($category_id) && !empty($category_id)) {
 }
 
 if(empty($lots)) {
-    $layout_content = error($link, 403);
+    $layout_content = error($link, 404);
     print ($layout_content);
     exit();
 }

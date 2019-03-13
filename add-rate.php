@@ -7,7 +7,9 @@ if (!$link) {
     die();
 };
 $user_name = $_SESSION['user']['name'] ?? "";
-if (isset($_GET) && !ctype_alpha(isset($_GET["lot_id"])) && !ctype_alpha(isset($_GET["cost"])) && !empty($user_name)) {
+$valid_cost = ctype_digit($_GET["cost"]);
+$valid_id = ctype_digit($_GET["lot_id"]);
+if (isset($_GET) && isset($valid_id) && isset($valid_cost) && !empty($user_name)) {
     $form = $_GET;
     $form = array_map("trim", $form);
     $min_rate = $_SESSION["user"]["min_rate"] ?? null;

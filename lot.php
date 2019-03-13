@@ -11,12 +11,13 @@ if (!$link) {
 $error = null;
 $is_error = true;
 $categories = get_categories($link);
-if (!empty($_GET["lot_id"]) && !ctype_alpha($_GET["lot_id"])) {
-    $lot_id = $_GET["lot_id"];
+$lot_id = $_GET["lot_id"] ?? "";
+if (!empty($lot_id) && ctype_digit($lot_id)) {
+
     $user_id = $_SESSION['user']['id'] ?? "";
-    $lot = get_lot($link, $_GET["lot_id"]);
-    $raties = get_raties($link, $lot["lot_id"]);
-    $max_rate = get_max_rate($link, $lot["lot_id"]);
+    $lot = get_lot($link, $lot_id);
+    $raties = get_raties($link, $lot_id);
+    $max_rate = get_max_rate($link, $lot_id);
     $is_users_lot = $lot["users_id"] === $user_id ? true : false ;
     $checked_rate = is_check_rate($link,$lot_id,$user_id);
     $min_rate = !$lot["r_amount"] ? $lot["start_price"] + $lot["step_price"] : $lot["step_price"] + $max_rate["max_amount"];
@@ -38,7 +39,7 @@ if (!empty($_GET["lot_id"]) && !ctype_alpha($_GET["lot_id"])) {
     }
 }
 if ($is_error) {
-    $layout_content = error($link, 403);
+    $layout_content = error($link, 404);
     print ($layout_content);
     exit();
 };
