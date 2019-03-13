@@ -1,10 +1,10 @@
 INSERT INTO categories (name, class) VALUES     -- добавляет категории в таблицу категорий
-  ("Доски и лыжи", "promo__item--boards"),
-  ("Крепления", "promo__item--attachment"),
-  ("Ботинки", "promo__item--boots"),
-  ("Одежда", "promo__item--clothing"),
-  ("Инструменты", "promo__item--tools"),
-  ("Разное", "promo__item--other");
+  ("Доски и лыжи", "--boards"),
+  ("Крепления", "--attachment"),
+  ("Ботинки", "--boots"),
+  ("Одежда", "--clothing"),
+  ("Инструменты", "--tools"),
+  ("Разное", "--other");
 
 INSERT INTO users (email,users.password, name, contacts, avatar) VALUES -- добавляет пользователей в таблицу пользователей
   (

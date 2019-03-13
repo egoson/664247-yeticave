@@ -18,8 +18,7 @@ $user_name = "";
 $is_auth= "";
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $form = $_POST;
-
-    array_walk($form, 'trim_value');
+    $form = array_map("trim", $form);
     $errors = [];
     $req_fields = ["email", "password", "name", "contacts"];
     foreach ($req_fields as $field) {

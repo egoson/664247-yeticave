@@ -7,6 +7,7 @@ if (!$link) {
     print("Ошибка: невозможно подключиться к MySQL " . mysqli_connect_error());
     die();
 };
+
 $error = null;
 $is_error = true;
 $categories = get_categories($link);
@@ -37,9 +38,7 @@ if (!empty($_GET["lot_id"]) && !ctype_alpha($_GET["lot_id"])) {
     }
 }
 if ($is_error) {
-    http_response_code(404);
-    $page_content = include_template('404.php', [
-        "equipments" => $categories]);
+    error_404($link);
 };
 $title_name = "Лот";
 $user_name = "";

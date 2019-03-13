@@ -18,7 +18,7 @@ $lot_date = "";
 $lot_name = "";
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $new_lot = $_POST;
-    array_walk($new_lot, 'trim_value');
+    $new_lot = array_map("trim", $new_lot);
     $required = ["lot-name", "description", "start_price", "step_price", "lot-date", "category", "lot-date"];
     $dict = ["lot-name" => "Имя лота", "description" => "Описание", "photo" => "Изображение", "start_price" => "Начальная цена", "step_price" => "Шаг ставки", "lot-date" => "Дата окончания торгов", "category" => "Категория"];
     $errors = [];
@@ -28,12 +28,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         }
     }
     if (!empty($_FILES["photo"]["name"])) {
-        $file = $_FILES["photo"];
         $tmp_name = $_FILES['photo']['tmp_name'];
-        $finfo = finfo_open(FILEINFO_MIME_TYPE);
         $file_type = mime_content_type($tmp_name);
-        if ($file_type !== "image/jpeg") {
-            $errors["photo"] = 'Загрузите картинку формата JPG';
+        if ($file_type !== "image/jpeg" & $file_type !== "image/jpg" & $file_type !== "image/png") {
+            $errors["photo"] = 'Загрузите картинку формата JPG/PNG/JPEG';
         } else {
             $filename = uniqid() . ".jpg";
             $new_lot["path"] = $filename;

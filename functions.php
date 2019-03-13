@@ -387,12 +387,42 @@ function get_lots_by_categories($link, $category) {
     }
     return mysqli_fetch_all($result, MYSQLI_ASSOC);
 }
-
-/**
- * Функция удаляет символы и пробелы в начале и в конце строки
- * @param $value
- */
-function trim_value(&$value)
+function error_404($link)
 {
-    $value = trim($value);
-};
+    http_response_code(404);
+    $categories = get_categories($link);
+    $title_name = "404";
+    $user_name = $_SESSION['user']['name'] ?? "";
+
+    $page_content = include_template("404.php", [
+        'equipments' => $categories
+    ]);
+    $layout_content = include_template("layout.php", [
+        'content' => $page_content,
+        'user' => $user_name,
+        'title' => $title_name,
+        'equipments' => $categories
+    ]);
+    print ($layout_content);
+    exit();
+}
+
+function error_403($link)
+{
+    http_response_code(403);
+    $categories = get_categories($link);
+    $title_name = "404";
+    $user_name = $_SESSION['user']['name'] ?? "";
+
+    $page_content = include_template("404.php", [
+        'equipments' => $categories
+    ]);
+    $layout_content = include_template("layout.php", [
+        'content' => $page_content,
+        'user' => $user_name,
+        'title' => $title_name,
+        'equipments' => $categories
+    ]);
+    print ($layout_content);
+    exit();
+}

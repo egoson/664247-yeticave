@@ -6,24 +6,18 @@ if (!$link) {
     print("Ошибка: невозможно подключиться к MySQL " . mysqli_connect_error());
     die();
 }
-
-if (!ctype_alpha(isset($_GET["category_id"])) && !ctype_alpha(isset($_GET["cur_page"]))) {
-    $category = $_GET["category_id"];
+$category_id = $_GET["category_id"] ?? "";
+if (!ctype_alpha($category_id) && !empty($category_id)) {
     $categories = get_categories($link);
-    $lots = get_lots_by_categories($link, $category);
+    $lots = get_lots_by_categories($link, $category_id);
     $title_name = "Главная";
     $user_name = $_SESSION['user']['name'] ?? "";
 } else {
-    http_response_code(404);
-    header("Location: 404.php");
+    error_404($link);
 }
 
-
-
-
 if(empty($lots)) {
-    http_response_code(404);
-    header("Location: 404.php");
+    error_404($link);
 }
 
 $page_content = include_template("all-lots.php", [

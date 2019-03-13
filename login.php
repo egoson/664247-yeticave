@@ -14,7 +14,7 @@ $lot = get_lots($link);
 $categories =  get_categories($link);
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $form = $_POST;
-    array_walk($form, 'trim_value');
+    $form = array_map("trim", $form);
     $required = ['email', 'password'];
     $errors = [];
     foreach ($required as $field) {
