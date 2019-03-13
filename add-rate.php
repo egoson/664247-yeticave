@@ -7,7 +7,7 @@ if (!$link) {
     die();
 };
 $user_name = $_SESSION['user']['name'] ?? "";
-if (isset($_GET) && !ctype_alpha(isset($_GET["lot_id"])) && !ctype_alpha(isset($_GET["cost"]))) {
+if (isset($_GET) && !ctype_alpha(isset($_GET["lot_id"])) && !ctype_alpha(isset($_GET["cost"])) && !empty($user_name)) {
     $form = $_GET;
     $form = array_map("trim", $form);
     $min_rate = $_SESSION["user"]["min_rate"] ?? null;
@@ -24,4 +24,6 @@ if (isset($_GET) && !ctype_alpha(isset($_GET["lot_id"])) && !ctype_alpha(isset($
     header("Location: lot.php?lot_id=" . $form["lot_id"]);
     exit();
 }
-error_403($link);
+$layout_content = error($link, 403);
+print ($layout_content);
+exit();

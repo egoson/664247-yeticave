@@ -7,7 +7,8 @@ if (!$link) {
     die();
 }
 if(!empty($_SESSION["user"]["name"])) {
-    header("Location: 404.php");
+    $layout_content = error($link, 403);
+    print ($layout_content);
     exit();
 }
 $lot = get_lots($link);

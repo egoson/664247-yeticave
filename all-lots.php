@@ -13,11 +13,15 @@ if (!ctype_alpha($category_id) && !empty($category_id)) {
     $title_name = "Главная";
     $user_name = $_SESSION['user']['name'] ?? "";
 } else {
-    error_404($link);
+    $layout_content = error($link, 404);
+    print ($layout_content);
+    exit();
 }
 
 if(empty($lots)) {
-    error_404($link);
+    $layout_content = error($link, 403);
+    print ($layout_content);
+    exit();
 }
 
 $page_content = include_template("all-lots.php", [

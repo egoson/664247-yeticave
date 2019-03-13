@@ -38,7 +38,9 @@ if (!empty($_GET["lot_id"]) && !ctype_alpha($_GET["lot_id"])) {
     }
 }
 if ($is_error) {
-    error_404($link);
+    $layout_content = error($link, 403);
+    print ($layout_content);
+    exit();
 };
 $title_name = "Лот";
 $user_name = "";

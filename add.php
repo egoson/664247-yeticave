@@ -6,7 +6,14 @@ if (!$link) {
     print("Ошибка: невозможно подключиться к MySQL " . mysqli_connect_error());
     die();
 };
-$user_name = $_SESSION['user']['name'] ?? header("Location: 403.php");
+
+if (isset($_SESSION['user']['name'])) {
+    $user_name = $_SESSION['user']['name'];
+} else {
+    $layout_content = error($link, 403);
+    print ($layout_content);
+    exit();
+}
 
 $categories =  get_categories($link);
 $is_auth = "";
@@ -16,6 +23,7 @@ $category = null;
 $file = "";
 $lot_date = "";
 $lot_name = "";
+$valid_format = ["image/jpg", "image/jpeg", "image/png"];
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $new_lot = $_POST;
     $new_lot = array_map("trim", $new_lot);
@@ -30,7 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if (!empty($_FILES["photo"]["name"])) {
         $tmp_name = $_FILES['photo']['tmp_name'];
         $file_type = mime_content_type($tmp_name);
-        if ($file_type !== "image/jpeg" & $file_type !== "image/jpg" & $file_type !== "image/png") {
+        if (!in_array($file_type, $valid_format)) {
             $errors["photo"] = 'Загрузите картинку формата JPG/PNG/JPEG';
         } else {
             $filename = uniqid() . ".jpg";
